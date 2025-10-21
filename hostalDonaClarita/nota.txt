@@ -1,4 +1,14 @@
 industria 4.0
     ciberseguridad
         vulneracion de servicios (saas)
-        
+    cloudcomputer
+    big data
+    IoT
+    robotica avanzada
+    simulacion de procesos
+    integracion de sistemas 
+    fabricacion aditiva
+    impresion 3D
+    VR
+    AR
+    
