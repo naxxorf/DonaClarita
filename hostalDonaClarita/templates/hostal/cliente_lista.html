@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Clientes - Hostal Doña Clarita{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Gestión de Clientes (Empresas) 👥</h1>
+    <a href="{% url 'hostal:cliente_crear' %}" class="btn btn-primary">
+        + Nuevo Cliente
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Razón Social</th>
+                    <th scope="col">RUT</th>
+                    <th scope="col">Usuario (Login)</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in object_list %}
+                <tr>
+                    <th scope="row">{{ cliente.razon_social }}</th>
+                    <td>{{ cliente.rut }}</td>
+                    <td>{{ cliente.user.username }}</td>
+                    <td>
+                        <a href="{% url 'hostal:cliente_editar' cliente.pk %}" class="btn btn-outline-primary btn-sm">Editar</a>
+                        <a href="{% url 'hostal:cliente_eliminar' cliente.pk %}" class="btn btn-outline-danger btn-sm">Borrar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No hay clientes (empresas) registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

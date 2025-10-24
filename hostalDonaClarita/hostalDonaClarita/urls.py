@@ -16,8 +16,12 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", admin.site.urls),  # Redirige la raíz al admin por ahora
+    path("hostal/", admin.site.urls),  # Rutas del hostal
+    path("comedor/", admin.site.urls),  # Rutas del comedor
+    path("administracion/", admin.site.urls),  # Rutas de administración
 ]

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Habitaciones - Hostal Doña Clarita{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Gestión de Habitaciones 🛏️</h1>
+    <a href="{% url 'hostal:habitacion_crear' %}" class="btn btn-primary">
+        + Nueva Habitación
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Número</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Tipo de Cama</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for habitacion in object_list %} <tr>
+                    <th scope="row">{{ habitacion.numero }}</th>
+                    <td>
+                        {% if habitacion.estado == 'D' %}
+                            <span class="badge bg-success">{{ habitacion.get_estado_display }}</span>
+                        {% elif habitacion.estado == 'O' %}
+                            <span class="badge bg-danger">{{ habitacion.get_estado_display }}</span>
+                        {% elif habitacion.estado == 'A' %}
+                            <span class="badge bg-info text-dark">{{ habitacion.get_estado_display }}</span>
+                        {% elif habitacion.estado == 'M' %}
+                            <span class="badge bg-warning text-dark">{{ habitacion.get_estado_display }}</span>
+                        {% elif habitacion.estado == 'L' %}
+                            <span class="badge bg-secondary">{{ habitacion.get_estado_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ habitacion.tipo_cama }}</td>
+                    <td>${{ habitacion.precio|floatformat:0 }}</td>
+                    <td>
+                        <a href="{% url 'hostal:habitacion_editar' habitacion.pk %}" class="btn btn-outline-primary btn-sm">Editar</a>
+                        <a href="{% url 'hostal:habitacion_eliminar' habitacion.pk %}" class="btn btn-outline-danger btn-sm">Borrar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No hay habitaciones registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
