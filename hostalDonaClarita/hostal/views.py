@@ -23,7 +23,7 @@ TEMPLATE_DELETE = 'hostal/generico_confirm_delete.html'
 
 class HabitacionListView(LoginRequiredMixin, ListView):
     model = Habitacion
-    template_name = 'hostal/habitacion_lista.html' # Tu plantilla
+    template_name = 'hostal/habitacion_lista.html' 
     context_object_name = 'object_list'
 
 class HabitacionCreateView(LoginRequiredMixin, CreateView):
@@ -65,7 +65,7 @@ class HabitacionDeleteView(LoginRequiredMixin, DeleteView):
 
 class ClienteListView(LoginRequiredMixin, ListView):
     model = Cliente
-    template_name = 'hostal/cliente_lista.html' # Tu plantilla
+    template_name = 'hostal/cliente_lista.html' 
     context_object_name = 'object_list'
 
 class ClienteCreateView(LoginRequiredMixin, CreateView):
@@ -107,7 +107,7 @@ class ClienteDeleteView(LoginRequiredMixin, DeleteView):
 
 class HuespedListView(LoginRequiredMixin, ListView):
     model = Huesped
-    template_name = 'hostal/huesped_lista.html' # Tu plantilla
+    template_name = 'hostal/huesped_lista.html'
     context_object_name = 'object_list'
 
 class HuespedCreateView(LoginRequiredMixin, CreateView):
