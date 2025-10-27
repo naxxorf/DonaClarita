@@ -21,11 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initDeleteConfirmations();
     
     /* ============================================
-       DROPDOWN MENUS
-       ============================================ */
-    initDropdowns();
-    
-    /* ============================================
        VALIDACIÓN DE RUT CHILENO
        ============================================ */
     initRutValidation();
