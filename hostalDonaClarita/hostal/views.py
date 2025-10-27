@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.utils import timezone
+from django.db.models import Q,Count
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
@@ -7,7 +9,8 @@ from django.views.generic import (
     UpdateView, 
     DeleteView
 )
-from .models import Habitacion, Cliente, Huesped, OrdenDeCompra
+from django.contrib.auth.decorators import login_required
+from .models import Habitacion, Cliente, Huesped, OrdenDeCompra, MinutaDia
 from .forms import OrdenDeCompraForm, HuespedForm, ClienteForm, HabitacionForm
 
 # ===============================================
@@ -170,3 +173,60 @@ class OrdenDeCompraCreateView(CreateView):
         context['titulo'] = 'Cargar Nueva Orden de Compra'
         context['cancel_url'] = reverse_lazy('orden_lista')
         return context
+    
+# ===============================================
+# Vista del DASHBOARD
+# ===============================================   
+@login_required
+def dashboard_view(request):
+    """
+    Vista principal que reúne todas las estadísticas clave 
+    para el dashboard.
+    """
+    
+    # 1. Estado de Habitaciones (Conteo y lista)
+    habitaciones_lista = Habitacion.objects.all().order_by('numero')
+    
+    # Usamos .aggregate() para un conteo eficiente por estado
+    conteo_estados = Habitacion.objects.values('estado').annotate(
+        total=Count('estado')
+    ).order_by() # El order_by() vacío es para limpiar ordenamientos por defecto
+
+    # Convertimos la lista de diccionarios a un diccionario fácil de usar
+    # ej: {'D': 5, 'O': 3, 'L': 2}
+    # Y lo inicializamos con ceros para todos los estados
+    status_choices = dict(Habitacion.ESTADO_CHOICES)
+    counts = {key: {'label': label, 'total': 0} for key, label in status_choices.items()}
+    
+    for item in conteo_estados:
+        key = item['estado']
+        if key in counts:
+            counts[key]['total'] = item['total']
+
+    # 2. Porcentaje de Ocupación
+    total_habitaciones = habitaciones_lista.count()
+    # "Ocupación" incluye Ocupada ('O') y Asignada ('A')
+    habitaciones_ocupadas = counts['O']['total'] + counts['A']['total']
+    
+    porcentaje_ocupacion = 0
+    if total_habitaciones > 0:
+        porcentaje_ocupacion = (habitaciones_ocupadas * 100) / total_habitaciones
+
+    # 3. Minuta de Platos del Día
+    today = timezone.now().date()
+    minuta_hoy = MinutaDia.objects.filter(fecha=today).first()
+    platos_del_dia = None
+    if minuta_hoy:
+        platos_del_dia = minuta_hoy.platos.all().order_by('tipo')
+
+    # 4. Compilar el contexto
+    context = {
+        'habitaciones_lista': habitaciones_lista,
+        'conteo_estados': counts, # Pasamos el diccionario de conteos
+        'total_habitaciones': total_habitaciones,
+        'porcentaje_ocupacion': porcentaje_ocupacion,
+        'platos_del_dia': platos_del_dia,
+        'fecha_hoy': today,
+    }
+    
+    return render(request, 'hostal/dashboard.html', context)

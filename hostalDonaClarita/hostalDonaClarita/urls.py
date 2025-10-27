@@ -20,6 +20,10 @@ from django.urls import path, include
 from hostal import views
 
 urlpatterns = [
+    # Rutas de inicio de sesión
+
+    #Dashboard
+    path('', views.dashboard_view, name='dashboard'),
     # Rutas de administración
     path("administracion/", admin.site.urls),
     # URLs de Habitacion

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    
+    <div class="row g-3 mb-3">
+        <div class="col-12">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase text-muted small">📈 Ocupación Total</h5>
+                    <div class="display-6 fw-bold">
+                        {{ porcentaje_ocupacion|floatformat:0 }}%
+                    </div>
+                    <div class="small text-muted">
+                        ({{ conteo_estados.O.total }} Ocupadas + {{ conteo_estados.A.total }} Asignadas) / {{ total_habitaciones }} Habitaciones Totales
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-lg-5 mb-4">
+        <div class="col">
+            <div class="card shadow-sm text-center h-100 estado-D">
+                <div class="card-body p-3">
+                    <h6 class="card-title text-uppercase small">{{ conteo_estados.D.label }}</h6>
+                    <div class="h4 fw-bold mb-0">{{ conteo_estados.D.total }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm text-center h-100 estado-O">
+                <div class="card-body p-3">
+                    <h6 class="card-title text-uppercase small">{{ conteo_estados.O.label }}</h6>
+                    <div class="h4 fw-bold mb-0">{{ conteo_estados.O.total }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm text-center h-100 estado-A">
+                <div class="card-body p-3">
+                    <h6 class="card-title text-uppercase small">{{ conteo_estados.A.label }}</h6>
+                    <div class="h4 fw-bold mb-0">{{ conteo_estados.A.total }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm text-center h-100 estado-L">
+                <div class="card-body p-3">
+                    <h6 class="card-title text-uppercase small">{{ conteo_estados.L.label }}</h6>
+                    <div class="h4 fw-bold mb-0">{{ conteo_estados.L.total }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm text-center h-100 estado-M">
+                <div class="card-body p-3">
+                    <h6 class="card-title text-uppercase small">{{ conteo_estados.M.label }}</h6>
+                    <div class="h4 fw-bold mb-0">{{ conteo_estados.M.total }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm h-100">
+                <div class="card-header small text-uppercase fw-bold p-3">
+                    🍽️ Minuta del Día ({{ fecha_hoy|date:"l, d M Y" }})
+                </div>
+                <div class="card-body p-3" style="max-height: 200px; overflow-y: auto;">
+                    {% if platos_del_dia %}
+                        <ul class="list-unstyled mb-0">
+                        {% for plato in platos_del_dia %}
+                            <li>
+                                <strong>{{ plato.get_tipo_display }}:</strong> {{ plato.nombre }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">No hay minuta registrada para hoy.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mb-3">Estado General de Habitaciones</h3>
+    
+    <div class="room-grid">
+        {% for habitacion in habitaciones_lista %}
+        <div class="card shadow-sm room-card estado-{{ habitacion.estado }}">
+            <div class="card-body">
+                <span class="room-number">{{ habitacion.numero }}</span>
+                <span class="room-status">{{ habitacion.get_estado_display }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
