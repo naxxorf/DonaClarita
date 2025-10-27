@@ -35,6 +35,7 @@ class HabitacionCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Crear Nueva Habitación"
+        context['cancel_url'] = reverse_lazy('habitacion_lista')
         return context
 
 class HabitacionUpdateView(LoginRequiredMixin, UpdateView):
