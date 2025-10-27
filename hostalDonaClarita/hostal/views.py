@@ -7,13 +7,13 @@ from django.views.generic import (
     UpdateView, 
     DeleteView
 )
-from .models import Habitacion, Cliente, Huesped
+from .models import Habitacion, Cliente, Huesped, OrdenDeCompra
+from .forms import OrdenDeCompraForm, HuespedForm, ClienteForm, HabitacionForm
 
 # ===============================================
 # Vistas Genéricas (para no repetir plantillas)
 # ===============================================
-# Usaremos nombres de plantilla genéricos para los formularios
-# y así no tener que crear 6 archivos HTML diferentes.
+
 TEMPLATE_FORM = 'hostal/generico_form.html'
 TEMPLATE_DELETE = 'hostal/generico_confirm_delete.html'
 
@@ -29,7 +29,7 @@ class HabitacionListView(LoginRequiredMixin, ListView):
 class HabitacionCreateView(LoginRequiredMixin, CreateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
-    fields = ['numero', 'estado', 'tipo_cama', 'accesorios', 'precio']
+    form_class = HabitacionForm
     success_url = reverse_lazy('habitacion_lista')
 
     def get_context_data(self, **kwargs):
@@ -41,7 +41,7 @@ class HabitacionCreateView(LoginRequiredMixin, CreateView):
 class HabitacionUpdateView(LoginRequiredMixin, UpdateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
-    fields = ['numero', 'estado', 'tipo_cama', 'accesorios', 'precio']
+    form_class = HabitacionForm
     success_url = reverse_lazy('habitacion_lista')
 
     def get_context_data(self, **kwargs):
@@ -73,7 +73,7 @@ class ClienteListView(LoginRequiredMixin, ListView):
 class ClienteCreateView(LoginRequiredMixin, CreateView):
     model = Cliente
     template_name = TEMPLATE_FORM
-    fields = ['user', 'razon_social', 'rut']
+    form_class = ClienteForm
     success_url = reverse_lazy('cliente_lista')
 
     def get_context_data(self, **kwargs):
@@ -85,7 +85,7 @@ class ClienteCreateView(LoginRequiredMixin, CreateView):
 class ClienteUpdateView(LoginRequiredMixin, UpdateView):
     model = Cliente
     template_name = TEMPLATE_FORM
-    fields = ['user', 'razon_social', 'rut']
+    form_class = ClienteForm
     success_url = reverse_lazy('cliente_lista')
 
     def get_context_data(self, **kwargs):
@@ -117,8 +117,7 @@ class HuespedListView(LoginRequiredMixin, ListView):
 class HuespedCreateView(LoginRequiredMixin, CreateView):
     model = Huesped
     template_name = TEMPLATE_FORM
-    # Seleccionamos los campos para el check-in
-    fields = ['nombre_completo', 'rut', 'empresa', 'habitacion', 'orden_de_compra_asociada']
+    form_class = HuespedForm
     success_url = reverse_lazy('huesped_lista')
 
     def get_context_data(self, **kwargs):
@@ -130,12 +129,13 @@ class HuespedCreateView(LoginRequiredMixin, CreateView):
 class HuespedUpdateView(LoginRequiredMixin, UpdateView):
     model = Huesped
     template_name = TEMPLATE_FORM
-    fields = ['nombre_completo', 'rut', 'empresa', 'habitacion', 'orden_de_compra_asociada']
+    form_class = HuespedForm
     success_url = reverse_lazy('huesped_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Huésped: {self.object.nombre_completo}"
+        context['cancel_url'] = reverse_lazy('huesped_lista')
         return context
 
 class HuespedDeleteView(LoginRequiredMixin, DeleteView):
@@ -147,4 +147,26 @@ class HuespedDeleteView(LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Eliminar Huésped: {self.object.nombre_completo}"
         context['mensaje_confirmacion'] = f"¿Está seguro de que desea eliminar al huésped {self.object.nombre_completo}?"
+        context['cancel_url'] = reverse_lazy('huesped_lista')
+        return context
+    
+    # ===============================================
+    # Vistas de ORDEN DE COMPRA
+    # ===============================================
+
+class OrdenDeCompraListView(ListView):
+    model = OrdenDeCompra
+    template_name = 'hostal/orden_lista.html' # Tendrás que crear esta plantilla
+    context_object_name = 'ordenes'
+
+class OrdenDeCompraCreateView(CreateView):
+    model = OrdenDeCompra
+    form_class = OrdenDeCompraForm
+    template_name = 'hostal/generico_form.html' 
+    success_url = reverse_lazy('orden_lista')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titulo'] = 'Cargar Nueva Orden de Compra'
+        context['cancel_url'] = reverse_lazy('orden_lista')
         return context

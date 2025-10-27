@@ -18,6 +18,7 @@
                     <th scope="col">Nombre Completo</th>
                     <th scope="col">RUT</th>
                     <th scope="col">Empresa (Cliente)</th>
+                    <th scope="col">Estado de Autorización</th>
                     <th scope="col">Habitación</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -28,6 +29,13 @@
                     <th scope="row">{{ huesped.nombre_completo }}</th>
                     <td>{{ huesped.rut }}</td>
                     <td>{{ huesped.empresa.razon_social }}</td>
+                    <td>
+                        {% if huesped.autorizado %}
+                            <span class="badge bg-success">Autorizado ✅</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pendiente ⏳</span>
+                        {% endif %}
+                    </td>
                     <td>{{ huesped.habitacion.numero|default:"Sin asignar" }}</td>
                     <td>
                         <a href="{% url 'huesped_editar' huesped.pk %}" class="btn btn-outline-primary btn-sm">Editar</a>

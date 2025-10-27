@@ -39,4 +39,8 @@ urlpatterns = [
     path('huespedes/crear/', views.HuespedCreateView.as_view(), name='huesped_crear'),
     path('huespedes/<int:pk>/editar/', views.HuespedUpdateView.as_view(), name='huesped_editar'),
     path('huespedes/<int:pk>/eliminar/', views.HuespedDeleteView.as_view(), name='huesped_eliminar'),
+
+    # URLs de Orden de Compra
+    path('ordenes/', views.OrdenDeCompraListView.as_view(), name='orden_lista'),
+    path('ordenes/crear/', views.OrdenDeCompraCreateView.as_view(), name='orden_crear'),
 ]

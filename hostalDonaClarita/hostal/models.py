@@ -80,3 +80,14 @@ class Huesped(models.Model):
 
     def __str__(self):
         return f"{self.nombre_completo} ({self.empresa.razon_social})"
+    @property
+    def esta_autorizado(self):
+        # La validación es simple: ¿Tiene una OC asignada?
+        return self.orden_de_compra_asociada is not None
+
+    @property
+    def estado_autorizacion_texto(self):
+        if self.esta_autorizado:
+            return f"✅ Validado (OC: {self.orden_de_compra_asociada.codigo_orden})"
+
+        return "❌ Sin Autorización"
