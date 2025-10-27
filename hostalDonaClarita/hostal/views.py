@@ -30,7 +30,7 @@ class HabitacionCreateView(LoginRequiredMixin, CreateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
     fields = ['numero', 'estado', 'tipo_cama', 'accesorios', 'precio']
-    success_url = reverse_lazy('hostal:habitacion_lista')
+    success_url = reverse_lazy('habitacion_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,17 +42,18 @@ class HabitacionUpdateView(LoginRequiredMixin, UpdateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
     fields = ['numero', 'estado', 'tipo_cama', 'accesorios', 'precio']
-    success_url = reverse_lazy('hostal:habitacion_lista')
+    success_url = reverse_lazy('habitacion_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Habitación: {self.object.numero}"
+        context['cancel_url'] = reverse_lazy('habitacion_lista')
         return context
 
 class HabitacionDeleteView(LoginRequiredMixin, DeleteView):
     model = Habitacion
     template_name = TEMPLATE_DELETE
-    success_url = reverse_lazy('hostal:habitacion_lista')
+    success_url = reverse_lazy('habitacion_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,28 +74,30 @@ class ClienteCreateView(LoginRequiredMixin, CreateView):
     model = Cliente
     template_name = TEMPLATE_FORM
     fields = ['user', 'razon_social', 'rut']
-    success_url = reverse_lazy('hostal:cliente_lista')
+    success_url = reverse_lazy('cliente_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Crear Nuevo Cliente (Empresa)"
+        context['cancel_url'] = reverse_lazy('cliente_lista')
         return context
 
 class ClienteUpdateView(LoginRequiredMixin, UpdateView):
     model = Cliente
     template_name = TEMPLATE_FORM
     fields = ['user', 'razon_social', 'rut']
-    success_url = reverse_lazy('hostal:cliente_lista')
+    success_url = reverse_lazy('cliente_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Cliente: {self.object.razon_social}"
+        context['cancel_url'] = reverse_lazy('cliente_lista')
         return context
 
 class ClienteDeleteView(LoginRequiredMixin, DeleteView):
     model = Cliente
     template_name = TEMPLATE_DELETE
-    success_url = reverse_lazy('hostal:cliente_lista')
+    success_url = reverse_lazy('cliente_lista')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -116,18 +119,19 @@ class HuespedCreateView(LoginRequiredMixin, CreateView):
     template_name = TEMPLATE_FORM
     # Seleccionamos los campos para el check-in
     fields = ['nombre_completo', 'rut', 'empresa', 'habitacion', 'orden_de_compra_asociada']
-    success_url = reverse_lazy('hostal:huesped_lista')
+    success_url = reverse_lazy('huesped_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Registrar Check-in de Huésped"
+        context['cancel_url'] = reverse_lazy('huesped_lista')
         return context
 
 class HuespedUpdateView(LoginRequiredMixin, UpdateView):
     model = Huesped
     template_name = TEMPLATE_FORM
     fields = ['nombre_completo', 'rut', 'empresa', 'habitacion', 'orden_de_compra_asociada']
-    success_url = reverse_lazy('hostal:huesped_lista')
+    success_url = reverse_lazy('huesped_lista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -137,7 +141,7 @@ class HuespedUpdateView(LoginRequiredMixin, UpdateView):
 class HuespedDeleteView(LoginRequiredMixin, DeleteView):
     model = Huesped
     template_name = TEMPLATE_DELETE
-    success_url = reverse_lazy('hostal:huesped_lista')
+    success_url = reverse_lazy('huesped_lista')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
