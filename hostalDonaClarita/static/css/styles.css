@@ -697,6 +697,7 @@ nav .nav-btn.active {
     display: flex;       /* Activa el modo "flexbox" */
     align-items: center; /* Centra verticalmente el emoji y el texto */
     gap: 0.5rem;         /* Añade un pequeño espacio entre el emoji y el texto */
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
 }
 
 .dropdown-item::before {
