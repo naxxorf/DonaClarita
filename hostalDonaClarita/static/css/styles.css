@@ -693,6 +693,15 @@ nav .nav-btn.active {
 .dropdown-menu button:hover {
     background: #f5f5f5;
 }
+.dropdown-item {
+    display: flex;       /* Activa el modo "flexbox" */
+    align-items: center; /* Centra verticalmente el emoji y el texto */
+    gap: 0.5rem;         /* Añade un pequeño espacio entre el emoji y el texto */
+}
+
+.dropdown-item::before {
+    flex-shrink: 0;
+}
 
 /* ============================================
    RESUMEN Y ESTADÍSTICAS
