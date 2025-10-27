@@ -9,8 +9,8 @@ from django.views.generic import (
     UpdateView, 
     DeleteView
 )
-from django.contrib.auth.decorators import login_required
-from .models import Habitacion, Cliente, Huesped, OrdenDeCompra, MinutaDia
+from .models import Habitacion, Cliente, Huesped, OrdenDeCompra
+from comedor.models import MinutaDia, Plato
 from .forms import OrdenDeCompraForm, HuespedForm, ClienteForm, HabitacionForm
 
 # ===============================================
@@ -35,6 +35,7 @@ class HabitacionCreateView(LoginRequiredMixin, CreateView):
     form_class = HabitacionForm
     success_url = reverse_lazy('habitacion_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Crear Nueva Habitación"
@@ -47,6 +48,7 @@ class HabitacionUpdateView(LoginRequiredMixin, UpdateView):
     form_class = HabitacionForm
     success_url = reverse_lazy('habitacion_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Habitación: {self.object.numero}"
@@ -58,6 +60,7 @@ class HabitacionDeleteView(LoginRequiredMixin, DeleteView):
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('habitacion_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Eliminar Habitación: {self.object.numero}"
@@ -79,6 +82,7 @@ class ClienteCreateView(LoginRequiredMixin, CreateView):
     form_class = ClienteForm
     success_url = reverse_lazy('cliente_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Crear Nuevo Cliente (Empresa)"
@@ -91,6 +95,7 @@ class ClienteUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ClienteForm
     success_url = reverse_lazy('cliente_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Cliente: {self.object.razon_social}"
@@ -101,6 +106,7 @@ class ClienteDeleteView(LoginRequiredMixin, DeleteView):
     model = Cliente
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('cliente_lista')
+    
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -123,6 +129,7 @@ class HuespedCreateView(LoginRequiredMixin, CreateView):
     form_class = HuespedForm
     success_url = reverse_lazy('huesped_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Registrar Check-in de Huésped"
@@ -135,6 +142,7 @@ class HuespedUpdateView(LoginRequiredMixin, UpdateView):
     form_class = HuespedForm
     success_url = reverse_lazy('huesped_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Huésped: {self.object.nombre_completo}"
@@ -145,6 +153,7 @@ class HuespedDeleteView(LoginRequiredMixin, DeleteView):
     model = Huesped
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('huesped_lista')
+    
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -157,17 +166,18 @@ class HuespedDeleteView(LoginRequiredMixin, DeleteView):
     # Vistas de ORDEN DE COMPRA
     # ===============================================
 
-class OrdenDeCompraListView(ListView):
+class OrdenDeCompraListView(LoginRequiredMixin,ListView):
     model = OrdenDeCompra
-    template_name = 'hostal/orden_lista.html' # Tendrás que crear esta plantilla
+    template_name = 'hostal/orden_lista.html' 
     context_object_name = 'ordenes'
 
-class OrdenDeCompraCreateView(CreateView):
+class OrdenDeCompraCreateView(LoginRequiredMixin,CreateView):
     model = OrdenDeCompra
     form_class = OrdenDeCompraForm
     template_name = 'hostal/generico_form.html' 
     success_url = reverse_lazy('orden_lista')
 
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = 'Cargar Nueva Orden de Compra'
@@ -177,56 +187,68 @@ class OrdenDeCompraCreateView(CreateView):
 # ===============================================
 # Vista del DASHBOARD
 # ===============================================   
-@login_required
+
 def dashboard_view(request):
     """
-    Vista principal que reúne todas las estadísticas clave 
-    para el dashboard.
+    Vista principal que actúa como Dashboard (para logueados) 
+    o como página pública (para anónimos).
     """
     
-    # 1. Estado de Habitaciones (Conteo y lista)
-    habitaciones_lista = Habitacion.objects.all().order_by('numero')
-    
-    # Usamos .aggregate() para un conteo eficiente por estado
-    conteo_estados = Habitacion.objects.values('estado').annotate(
-        total=Count('estado')
-    ).order_by() # El order_by() vacío es para limpiar ordenamientos por defecto
-
-    # Convertimos la lista de diccionarios a un diccionario fácil de usar
-    # ej: {'D': 5, 'O': 3, 'L': 2}
-    # Y lo inicializamos con ceros para todos los estados
-    status_choices = dict(Habitacion.ESTADO_CHOICES)
-    counts = {key: {'label': label, 'total': 0} for key, label in status_choices.items()}
-    
-    for item in conteo_estados:
-        key = item['estado']
-        if key in counts:
-            counts[key]['total'] = item['total']
-
-    # 2. Porcentaje de Ocupación
-    total_habitaciones = habitaciones_lista.count()
-    # "Ocupación" incluye Ocupada ('O') y Asignada ('A')
-    habitaciones_ocupadas = counts['O']['total'] + counts['A']['total']
-    
-    porcentaje_ocupacion = 0
-    if total_habitaciones > 0:
-        porcentaje_ocupacion = (habitaciones_ocupadas * 100) / total_habitaciones
-
-    # 3. Minuta de Platos del Día
+    # --- Lógica de la Minuta (Esto lo verán TODOS) ---
     today = timezone.now().date()
     minuta_hoy = MinutaDia.objects.filter(fecha=today).first()
     platos_del_dia = None
     if minuta_hoy:
         platos_del_dia = minuta_hoy.platos.all().order_by('tipo')
 
-    # 4. Compilar el contexto
-    context = {
-        'habitaciones_lista': habitaciones_lista,
-        'conteo_estados': counts, # Pasamos el diccionario de conteos
-        'total_habitaciones': total_habitaciones,
-        'porcentaje_ocupacion': porcentaje_ocupacion,
-        'platos_del_dia': platos_del_dia,
-        'fecha_hoy': today,
-    }
-    
-    return render(request, 'hostal/dashboard.html', context)
+    # --- Decidimos qué mostrar ---
+    if request.user.is_authenticated:
+        
+        # --- LÓGICA DEL DASHBOARD (Solo para logueados) ---
+        
+        # 1. Estado de Habitaciones (Conteo y lista)
+        habitaciones_lista = Habitacion.objects.all().order_by('numero')
+        conteo_estados = Habitacion.objects.values('estado').annotate(
+            total=Count('estado')
+        ).order_by()
+
+        status_choices = dict(Habitacion.ESTADO_CHOICES)
+        counts = {key: {'label': label, 'total': 0} for key, label in status_choices.items()}
+        for item in conteo_estados:
+            key = item['estado']
+            if key in counts:
+                counts[key]['total'] = item['total']
+
+        # 2. Porcentaje de Ocupación
+        total_habitaciones = habitaciones_lista.count()
+        habitaciones_ocupadas = counts['O']['total'] + counts['A']['total']
+        
+        porcentaje_ocupacion = 0
+        if total_habitaciones > 0:
+            porcentaje_ocupacion = (habitaciones_ocupadas * 100) / total_habitaciones
+
+        # 3. Compilar el contexto COMPLETO
+        context = {
+            'habitaciones_lista': habitaciones_lista,
+            'conteo_estados': counts,
+            'total_habitaciones': total_habitaciones,
+            'porcentaje_ocupacion': porcentaje_ocupacion,
+            'platos_del_dia': platos_del_dia,
+            'fecha_hoy': today,
+        }
+        
+        # Renderizamos la plantilla del DASHBOARD
+        return render(request, 'hostal/dashboard.html', context)
+        
+    else:
+        
+        # --- LÓGICA PÚBLICA (Solo para anónimos) ---
+        
+        # 3. Compilar el contexto BÁSICO
+        context = {
+            'platos_del_dia': platos_del_dia,
+            'fecha_hoy': today,
+        }
+        
+        # Renderizamos la plantilla PÚBLICA
+        return render(request, 'hostal/public_home.html', context)

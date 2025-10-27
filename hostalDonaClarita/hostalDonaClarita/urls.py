@@ -47,4 +47,7 @@ urlpatterns = [
     # URLs de Orden de Compra
     path('ordenes/', views.OrdenDeCompraListView.as_view(), name='orden_lista'),
     path('ordenes/crear/', views.OrdenDeCompraCreateView.as_view(), name='orden_crear'),
+
+    # URLs de la app comedor
+    path('comedor/', include('comedor.urls', namespace='comedor')),
 ]
