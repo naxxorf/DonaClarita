@@ -5,7 +5,7 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Gestión de Clientes (Empresas) 👥</h1>
-    <a href="{% url 'hostal:cliente_crear' %}" class="btn btn-primary">
+    <a href="{% url 'cliente_crear' %}" class="btn btn-primary">
         + Nuevo Cliente
     </a>
 </div>
@@ -28,8 +28,8 @@
                     <td>{{ cliente.rut }}</td>
                     <td>{{ cliente.user.username }}</td>
                     <td>
-                        <a href="{% url 'hostal:cliente_editar' cliente.pk %}" class="btn btn-outline-primary btn-sm">Editar</a>
-                        <a href="{% url 'hostal:cliente_eliminar' cliente.pk %}" class="btn btn-outline-danger btn-sm">Borrar</a>
+                        <a href="{% url 'cliente_editar' cliente.pk %}" class="btn btn-outline-primary btn-sm">Editar</a>
+                        <a href="{% url 'cliente_eliminar' cliente.pk %}" class="btn btn-outline-danger btn-sm">Borrar</a>
                     </td>
                 </tr>
                 {% empty %}
