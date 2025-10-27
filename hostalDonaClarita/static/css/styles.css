@@ -656,6 +656,7 @@ nav .nav-btn.active {
 }
 
 .dropdown-menu {
+    width: max-content;
     display: none;
     position: absolute;
     top: 100%;
