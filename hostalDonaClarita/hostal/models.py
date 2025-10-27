@@ -7,11 +7,11 @@ RUT_VALIDATOR = RegexValidator(r'^\d{7,8}-[0-9kK]$', 'Formato RUT inválido. Ej:
 # REQUERIMIENTO: REGISTRO DE CLIENTES [cite: 12]
 class Cliente(models.Model):
     """
-    Representa a la Empresa (cliente) que contrata los servicios[cite: 13].
-    Se vincula 1 a 1 con un Usuario de Django para el login[cite: 13].
+    Representa a la Empresa (cliente) que contrata los servicios.
+    Se vincula 1 a 1 con un Usuario de Django para el login.
     """
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cliente_profile', help_text="Usuario de la empresa para iniciar sesión")
-    razon_social = models.CharField(max_length=255, unique=True, help_text="Datos de la empresa [cite: 13]")
+    razon_social = models.CharField(max_length=255, unique=True, help_text="Datos de la empresa.")
     rut = models.CharField(max_length=12, unique=True, validators=[RUT_VALIDATOR], db_index=True)
     
     class Meta:
@@ -21,10 +21,10 @@ class Cliente(models.Model):
     def __str__(self):
         return self.razon_social
 
-# REQUERIMIENTO: REGISTRO DE HABITACIÓN [cite: 15]
+# REQUERIMIENTO: REGISTRO DE HABITACIÓN 
 class Habitacion(models.Model):
     """
-    Representa una habitación del hostal y su estado[cite: 16].
+    Representa una habitación del hostal y su estado.
     """
     ESTADO_CHOICES = [
         ('D', 'Disponible'),
@@ -35,10 +35,10 @@ class Habitacion(models.Model):
     ]
     
     numero = models.CharField(max_length=10, unique=True, db_index=True)
-    estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='D', help_text="Estado de disponibilidad de la habitación [cite: 16]")
-    tipo_cama = models.CharField(max_length=100, help_text="Datos propios de la habitación [cite: 20]")
-    accesorios = models.TextField(blank=True, help_text="Accesorios de la habitación [cite: 20]")
-    precio = models.DecimalField(max_digits=10, decimal_places=2, help_text="Precio de la habitación [cite: 20]")
+    estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='D', help_text="Estado de disponibilidad de la habitación")
+    tipo_cama = models.CharField(max_length=100, help_text="Datos propios de la habitación")
+    accesorios = models.TextField(blank=True, help_text="Accesorios de la habitación")
+    precio = models.DecimalField(max_digits=10, decimal_places=2, help_text="Precio de la habitación")
 
     class Meta:
         ordering = ['numero']
@@ -46,15 +46,15 @@ class Habitacion(models.Model):
     def __str__(self):
         return f"Habitación {self.numero} ({self.get_estado_display()})"
 
-# REQUERIMIENTO: REGISTROS DE ORDEN DE COMPRA (CLIENTE) [cite: 35]
+# REQUERIMIENTO: REGISTROS DE ORDEN DE COMPRA (CLIENTE)
 class OrdenDeCompra(models.Model):
     """
-    Registra la orden de compra enviada por la empresa cliente[cite: 36].
+    Registra la orden de compra enviada por la empresa cliente.
     """
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='ordenes', help_text="Cliente que emite la orden")
     codigo_orden = models.CharField(max_length=100, unique=True, help_text="Código de la orden de compra", db_index=True)
     fecha_emision = models.DateField(auto_now_add=True)
-    lista_huespedes_excel = models.FileField(upload_to='listas_excel/', blank=True, null=True, help_text="Permite registrar la lista de huéspedes por planilla [cite: 38]")
+    lista_huespedes_excel = models.FileField(upload_to='listas_excel/', blank=True, null=True, help_text="Permite registrar la lista de huéspedes por planilla.")
 
     class Meta:
         ordering = ['-fecha_emision']
@@ -63,14 +63,14 @@ class OrdenDeCompra(models.Model):
     def __str__(self):
         return f"OC {self.codigo_orden} - {self.cliente.razon_social}"
 
-# REQUERIMIENTO: REGISTRO DE HUÉSPEDES [cite: 26]
+# REQUERIMIENTO: REGISTRO DE HUÉSPEDES
 class Huesped(models.Model):
     """
-    Ficha del huésped (trabajador de la empresa)[cite: 27].
+    Ficha del huésped (trabajador de la empresa).
     """
-    empresa = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='huespedes', help_text="Empresa de procedencia [cite: 27]")
+    empresa = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='huespedes', help_text="Empresa de procedencia.")
     orden_de_compra_asociada = models.ForeignKey(OrdenDeCompra, on_delete=models.SET_NULL, null=True, blank=True, help_text="Orden de compra que valida su estadía")
-    habitacion = models.ForeignKey(Habitacion, on_delete=models.SET_NULL, null=True, blank=True, related_name='ocupantes', help_text="Habitación asignada [cite: 28, 37]")
+    habitacion = models.ForeignKey(Habitacion, on_delete=models.SET_NULL, null=True, blank=True, related_name='ocupantes', help_text="Habitación asignada.")
     rut = models.CharField(max_length=12, unique=True, validators=[RUT_VALIDATOR], db_index=True)
     nombre_completo = models.CharField(max_length=255)
 
