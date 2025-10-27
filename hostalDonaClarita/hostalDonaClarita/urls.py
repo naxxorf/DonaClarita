@@ -20,10 +20,8 @@ from django.urls import path, include
 from hostal import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("hostal/", admin.site.urls),  # Rutas del hostal
-    path("comedor/", admin.site.urls),  # Rutas del comedor
-    path("administracion/", admin.site.urls),  # Rutas de administración
+    # Rutas de administración
+    path("administracion/", admin.site.urls),
     # URLs de Habitacion
     path('habitaciones/', views.HabitacionListView.as_view(), name='habitacion_lista'),
     path('habitaciones/crear/', views.HabitacionCreateView.as_view(), name='habitacion_crear'),
