@@ -30,11 +30,7 @@
                     <td>{{ huesped.rut }}</td>
                     <td>{{ huesped.empresa.razon_social }}</td>
                     <td>
-                        {% if huesped.autorizado %}
-                            <span class="badge bg-success">Autorizado ✅</span>
-                        {% else %}
-                            <span class="badge bg-warning text-dark">Pendiente ⏳</span>
-                        {% endif %}
+                        {{ huesped.estado_autorizacion_texto }}
                     </td>
                     <td>{{ huesped.habitacion.numero|default:"Sin asignar" }}</td>
                     <td>
