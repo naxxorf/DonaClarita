@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Gestión de Platos 🍲</h1>
 
-        <a href="{% url 'plato_crear' %}" class="btn btn-primary">
+        <a href="{% url 'comedor:plato_crear' %}" class="btn btn-primary">
             + Nuevo Plato
         </a>
     </div>
@@ -29,11 +29,11 @@
                         <td class="align-middle">{{ plato.get_tipo_display }}</td>
                         <td class="align-middle">{{ plato.descripcion|truncatewords:15 }}</td>
                         <td class="text-end">
-                            <a href="{% url 'plato_editar' plato.pk %}" class="btn btn-sm btn-outline-primary">
+                            <a href="{% url 'comedor:plato_editar' plato.pk %}" class="btn btn-sm btn-outline-primary">
                                 Editar
                             </a>
 
-                            <a href="{% url 'plato_eliminar' plato.pk %}" class="btn btn-sm btn-outline-danger">
+                            <a href="{% url 'comedor:plato_eliminar' plato.pk %}" class="btn btn-sm btn-outline-danger">
                                 Borrar
                             </a>
                         </td>

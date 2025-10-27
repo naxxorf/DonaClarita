@@ -5,8 +5,8 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Gestión de Minutas 🗓️</h1>
-        
-        <a href="{% url 'minuta_crear' %}" class="btn btn-primary">
+
+        <a href="{% url 'comedor:minuta_crear' %}" class="btn btn-primary">
             + Nueva Minuta
         </a>
     </div>
@@ -27,11 +27,11 @@
                         <td class="align-middle fw-bold">{{ minuta.fecha|date:"l, d \d\e F \d\e Y" }}</td>
                         <td class="align-middle">{{ minuta.platos.count }}</td>
                         <td class="text-end">
-                            <a href="{% url 'minuta_editar' minuta.pk %}" class="btn btn-sm btn-outline-primary">
+                            <a href="{% url 'comedor:minuta_editar' minuta.pk %}" class="btn btn-sm btn-outline-primary">
                                 Editar Platos
                             </a>
-                            
-                            <a href="{% url 'minuta_eliminar' minuta.pk %}" class="btn btn-sm btn-outline-danger">
+
+                            <a href="{% url 'comedor:minuta_eliminar' minuta.pk %}" class="btn btn-sm btn-outline-danger">
                                 Borrar
                             </a>
                         </td>
