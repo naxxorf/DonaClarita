@@ -80,6 +80,7 @@ class Huesped(models.Model):
 
     def __str__(self):
         return f"{self.nombre_completo} ({self.empresa.razon_social})"
+    
     @property
     def esta_autorizado(self):
         # La validación es simple: ¿Tiene una OC asignada?
@@ -91,3 +92,37 @@ class Huesped(models.Model):
             return f"✅ Validado (OC: {self.orden_de_compra_asociada.codigo_orden})"
 
         return "❌ Sin Autorización"
+    
+    def save(self, *args, **kwargs):
+        
+        # 1. Obtenemos la habitación "antigua" (la que estaba en la BBDD)
+        old_habitacion = None
+        if self.pk: # Si el huésped ya existe (es una edición)
+            try:
+                # Buscamos el estado anterior del huésped
+                old_huesped = Huesped.objects.get(pk=self.pk)
+                old_habitacion = old_huesped.habitacion
+            except Huesped.DoesNotExist:
+                pass # No debería pasar, pero por si acaso
+
+        # 2. Obtenemos la habitación "nueva" (la que se está asignando ahora)
+        new_habitacion = self.habitacion
+
+        # 3. Guardamos al huésped PRIMERO
+        super().save(*args, **kwargs)
+
+        # 4. Comparamos si la habitación cambió
+        if new_habitacion != old_habitacion:
+            
+            # 4a. Si hay una HABITACIÓN NUEVA, marcarla como Ocupada
+            if new_habitacion:
+                new_habitacion.estado = 'O'  # 'O' = Ocupada
+                new_habitacion.save(update_fields=['estado'])
+
+            # 4b. Si había una HABITACIÓN ANTIGUA, marcarla para Limpieza
+            if old_habitacion:
+                # Revisamos si la habitación antigua quedó 100% vacía
+                # Usamos el related_name='ocupantes' que ya tenías
+                if not old_habitacion.ocupantes.exists():
+                    old_habitacion.estado = 'L'  # 'L' = Para Limpieza
+                    old_habitacion.save(update_fields=['estado'])
