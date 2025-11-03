@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title">Iniciar Sesión</h3>
+            </div>
+            <div class="card-body">
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        Tu usuario o contraseña son incorrectos.
+                    </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
