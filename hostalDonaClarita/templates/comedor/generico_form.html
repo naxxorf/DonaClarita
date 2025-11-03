@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %} {% block title %}{{ titulo }}{% endblock %}
+{% load crispy_forms_tags %} {% block title %}{{ titulo }}{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -12,7 +12,7 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
-                    {{ form.as_p }} 
+                   {% crispy form %}
                     
                     <hr>
                     <div class="d-flex justify-content-between">

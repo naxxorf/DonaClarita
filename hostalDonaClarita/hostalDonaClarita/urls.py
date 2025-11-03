@@ -50,4 +50,7 @@ urlpatterns = [
 
     # URLs de la app comedor
     path('comedor/', include('comedor.urls', namespace='comedor')),
+    # URLs de Autenticación (Login y Logout)
+    
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

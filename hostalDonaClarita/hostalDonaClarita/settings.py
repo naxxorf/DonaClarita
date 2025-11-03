@@ -37,10 +37,18 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.admin',
+    'django.contrib.auth',
     'hostal',
     'comedor',
     'administracion',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+    # Configuración de Crispy
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -125,4 +133,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = '/admin/login/'
+
+# Redirecciones de Login
+LOGIN_URL = 'login' # Nombre de la URL de login
+LOGIN_REDIRECT_URL = 'hostal:habitacion_lista' # A dónde ir después del login
+LOGOUT_REDIRECT_URL = 'login' # A dónde ir después del logout
