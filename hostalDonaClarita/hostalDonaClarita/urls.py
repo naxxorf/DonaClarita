@@ -27,10 +27,7 @@ urlpatterns = [
     # Rutas de administración
     path("administracion/", admin.site.urls),
     # URLs de Habitacion
-    path('habitaciones/', views.HabitacionListView.as_view(), name='habitacion_lista'),
-    path('habitaciones/crear/', views.HabitacionCreateView.as_view(), name='habitacion_crear'),
-    path('habitaciones/<int:pk>/editar/', views.HabitacionUpdateView.as_view(), name='habitacion_editar'),
-    path('habitaciones/<int:pk>/eliminar/', views.HabitacionDeleteView.as_view(), name='habitacion_eliminar'),
+    path('hostal/', include('hostal.urls', namespace='hostal')),
     
     # URLs de Cliente
     path('clientes/', views.ClienteListView.as_view(), name='cliente_lista'),
@@ -51,6 +48,6 @@ urlpatterns = [
     # URLs de la app comedor
     path('comedor/', include('comedor.urls', namespace='comedor')),
     # URLs de Autenticación (Login y Logout)
-    
+
     path('accounts/', include('django.contrib.auth.urls')),
 ]
