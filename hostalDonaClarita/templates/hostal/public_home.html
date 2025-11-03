@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <h2 class="text-center mb-4">Bienvenido a Hostal Doña Clarita</h2>
+
+            <div class="card shadow-sm h-100">
+                <div class="card-header small text-uppercase fw-bold p-3">
+                    🍽️ Minuta del Día ({{ fecha_hoy|date:"l, d M Y" }})
+                </div>
+                <div class="card-body p-3">
+                    {% if platos_del_dia %}
+                        <ul class="list-unstyled mb-0">
+                        {% for plato in platos_del_dia %}
+                            <li>
+                                <strong>{{ plato.get_tipo_display }}:</strong> {{ plato.nombre }}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">No hay minuta registrada para hoy.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'admin:login' %}" class="btn btn-primary">Acceso de Personal</a>
+                </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

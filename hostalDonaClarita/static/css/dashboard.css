@@ -1,0 +1,66 @@
+/* Grilla de Habitaciones */
+.room-grid {
+    display: grid;
+    /* Crea columnas automáticas que miden mín 120px */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem; /* Espacio entre las tarjetas */
+}
+
+.room-card {
+    text-align: center;
+    border-width: 2px;
+    transition: all 0.2s ease-in-out;
+}
+
+.room-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.room-card .room-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: block;
+}
+
+.room-card .room-status {
+    font-size: 0.9rem;
+}
+
+/* COLORES DE ESTADO (Basados en los 'choices' de tu modelo)
+*/
+
+/* D = Disponible (Verde) */
+.room-card.estado-D {
+    background-color: #e6f7ec;
+    border-color: #5cb85c;
+    color: #1e4620;
+}
+
+/* O = Ocupada (Rojo) */
+.room-card.estado-O {
+    background-color: #fdecea;
+    border-color: #d9534f;
+    color: #5d1a18;
+}
+
+/* A = Asignada a empresa (Naranjo - también "no disponible") */
+.room-card.estado-A {
+    background-color: #fff4e5;
+    border-color: #f0ad4e;
+    color: #664513;
+}
+
+/* L = Para Limpieza (Azul) */
+.room-card.estado-L {
+    background-color: #e7f3fe;
+    border-color: #0275d8;
+    color: #013c6b;
+}
+
+/* M = En mantenimiento (Gris) */
+.room-card.estado-M {
+    background-color: #f6f6f7;
+    border-color: #818a91;
+    color: #373a3c;
+}
