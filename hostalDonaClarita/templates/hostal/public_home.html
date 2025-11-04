@@ -5,9 +5,7 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-
             <h2 class="text-center mb-4">Bienvenido a Hostal Doña Clarita</h2>
-
             <div class="card shadow-sm h-100">
                 <div class="card-header small text-uppercase fw-bold p-3">
                     🍽️ Minuta del Día ({{ fecha_hoy|date:"l, d M Y" }})
@@ -26,11 +24,6 @@
                     {% endif %}
                 </div>
             </div>
-
-            <div class="text-center mt-4">
-                <a href="{% url 'admin:login' %}" class="btn btn-primary">Acceso de Personal</a>
-                </div>
-
         </div>
     </div>
 </div>

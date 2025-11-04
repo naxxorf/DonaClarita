@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Órdenes de Compra</h1>
         
-        <a href="{% url 'orden_crear' %}" class="btn btn-primary">
+        <a href="{% url 'hostal:orden_crear' %}" class="btn btn-primary">
             + Cargar Nueva OC
         </a>
     </div>
@@ -29,7 +29,7 @@
                         <td>{{ orden.fecha_emision }}</td>
                         <td>
                             {% if orden.lista_huespedes_excel %}
-                                <a href="{{ orden.lista_huespedes_excel.url }}" target="_blank">
+                                <a href="{{ hostal:orden.lista_huespedes_excel.url }}" target="_blank">
                                     Descargar Lista
                                 </a>
                             {% else %}
