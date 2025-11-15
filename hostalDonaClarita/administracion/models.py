@@ -70,3 +70,26 @@ class DetallePedido(models.Model):
     @property
     def subtotal(self):
         return self.cantidad * self.precio_unitario
+    
+# ===============================================
+# 4. GESTIÓN DE PERSONAL (EMPLEADOS)
+# ===============================================
+class Empleado(models.Model):
+    """
+    Extiende el usuario de Django para asignarle un ROL específico
+    que limitará su acceso en el sistema.
+    """
+    ROLES = [
+        ('ADMIN', 'Administrador General'),      # Acceso total
+        ('RECEPCION', 'Recepcionista'),          # Acceso solo a Hostal (Check-in, Habitaciones)
+        ('COCINA', 'Encargado de Cocina'),       # Acceso solo a Comedor (Platos, Minutas)
+        ('BODEGA', 'Encargado de Bodega'),       # Acceso solo a Administración (Pedidos, Proveedores)
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='empleado_profile')
+    rut = models.CharField(max_length=12, unique=True, help_text="RUT del empleado")
+    telefono = models.CharField(max_length=20, blank=True)
+    rol = models.CharField(max_length=20, choices=ROLES, default='RECEPCION')
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} ({self.get_rol_display()})"    

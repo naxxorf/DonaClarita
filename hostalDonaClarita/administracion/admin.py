@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Proveedor, FamiliaProducto, Producto, OrdenPedido, DetallePedido
+from .models import Proveedor, FamiliaProducto, Producto, OrdenPedido, DetallePedido, Empleado
+
 
 class DetallePedidoInline(admin.TabularInline):
     model = DetallePedido
@@ -18,3 +19,9 @@ class ProductoAdmin(admin.ModelAdmin):
 
 admin.site.register(Proveedor)
 admin.site.register(FamiliaProducto)
+
+@admin.register(Empleado)
+class EmpleadoAdmin(admin.ModelAdmin):
+    list_display = ('user', 'rut', 'rol', 'telefono')
+    list_filter = ('rol',)
+    search_fields = ('user__username', 'rut')
