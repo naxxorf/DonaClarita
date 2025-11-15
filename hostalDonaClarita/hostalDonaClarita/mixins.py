@@ -35,3 +35,15 @@ class SoloBodegaMixin(UserPassesTestMixin):
     def handle_no_permission(self):
         messages.error(self.request, "⛔ Acceso denegado. Área exclusiva de Administración.")
         return redirect('hostal:dashboard')
+    
+class SoloAdminMixin(UserPassesTestMixin):
+    """ Solo permite acceso a Administradores Generales y Superusuarios """
+    def test_func(self):
+        u = self.request.user
+        if not u.is_authenticated: return False
+        # Pasa si es Superuser O si su rol es 'ADMIN'
+        return u.is_active and (u.is_superuser or (hasattr(u, 'empleado_profile') and u.empleado_profile.rol == 'ADMIN'))
+    
+    def handle_no_permission(self):
+        messages.error(self.request, "⛔ Acceso restringido: Solo el Administrador puede gestionar personal.")
+        return redirect('hostal:dashboard')

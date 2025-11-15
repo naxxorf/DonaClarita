@@ -13,4 +13,8 @@ urlpatterns = [
     # Pedidos
     path('pedidos/', views.OrdenPedidoListView.as_view(), name='pedido_lista'),
     path('pedidos/crear/', views.OrdenPedidoCreateView.as_view(), name='pedido_crear'),
+    path('empleados/', views.EmpleadoListView.as_view(), name='empleado_lista'),
+    path('empleados/crear/', views.EmpleadoCreateView.as_view(), name='empleado_crear'),
+    path('empleados/<int:pk>/editar/', views.EmpleadoUpdateView.as_view(), name='empleado_editar'),
+    path('empleados/<int:pk>/eliminar/', views.EmpleadoDeleteView.as_view(), name='empleado_eliminar'),
 ]
