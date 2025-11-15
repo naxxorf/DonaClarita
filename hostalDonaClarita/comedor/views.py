@@ -3,6 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Plato, MinutaDia
 from .forms import PlatoForm, MinutaDiaForm
+from hostalDonaClarita.mixins import SoloCocinaMixin
+
 
 # Definimos las plantillas genéricas
 TEMPLATE_FORM = 'comedor/generico_form.html'
@@ -12,12 +14,12 @@ TEMPLATE_DELETE = 'comedor/generico_confirm_delete.html'
 # Vistas de PLATO
 # ===============================================
 
-class PlatoListView(LoginRequiredMixin, ListView):
+class PlatoListView(SoloCocinaMixin,LoginRequiredMixin, ListView):
     model = Plato
     template_name = 'comedor/plato_lista.html'
     context_object_name = 'platos'
 
-class PlatoCreateView(LoginRequiredMixin, CreateView):
+class PlatoCreateView(SoloCocinaMixin,LoginRequiredMixin, CreateView):
     model = Plato
     form_class = PlatoForm
     template_name = TEMPLATE_FORM
@@ -29,7 +31,7 @@ class PlatoCreateView(LoginRequiredMixin, CreateView):
         context['cancel_url'] = reverse_lazy('comedor:plato_lista')
         return context
 
-class PlatoUpdateView(LoginRequiredMixin, UpdateView):
+class PlatoUpdateView(SoloCocinaMixin,LoginRequiredMixin, UpdateView):
     model = Plato
     form_class = PlatoForm
     template_name = TEMPLATE_FORM
@@ -41,7 +43,7 @@ class PlatoUpdateView(LoginRequiredMixin, UpdateView):
         context['cancel_url'] = reverse_lazy('comedor:plato_lista')
         return context
 
-class PlatoDeleteView(LoginRequiredMixin, DeleteView):
+class PlatoDeleteView(SoloCocinaMixin,LoginRequiredMixin, DeleteView):
     model = Plato
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('comedor:plato_lista')
@@ -55,12 +57,12 @@ class PlatoDeleteView(LoginRequiredMixin, DeleteView):
 # Vistas de MINUTA (Menú del Día)
 # ===============================================
 
-class MinutaDiaListView(LoginRequiredMixin, ListView):
+class MinutaDiaListView(SoloCocinaMixin,LoginRequiredMixin, ListView):
     model = MinutaDia
     template_name = 'comedor/minuta_lista.html'
     context_object_name = 'minutas'
 
-class MinutaDiaCreateView(LoginRequiredMixin, CreateView):
+class MinutaDiaCreateView(SoloCocinaMixin,LoginRequiredMixin, CreateView):
     model = MinutaDia
     form_class = MinutaDiaForm
     template_name = TEMPLATE_FORM
@@ -72,7 +74,7 @@ class MinutaDiaCreateView(LoginRequiredMixin, CreateView):
         context['cancel_url'] = reverse_lazy('comedor:minuta_lista')
         return context
 
-class MinutaDiaUpdateView(LoginRequiredMixin, UpdateView):
+class MinutaDiaUpdateView(SoloCocinaMixin,LoginRequiredMixin, UpdateView):
     model = MinutaDia
     form_class = MinutaDiaForm
     template_name = TEMPLATE_FORM
@@ -84,7 +86,7 @@ class MinutaDiaUpdateView(LoginRequiredMixin, UpdateView):
         context['cancel_url'] = reverse_lazy('comedor:minuta_lista')
         return context
 
-class MinutaDiaDeleteView(LoginRequiredMixin, DeleteView):
+class MinutaDiaDeleteView(SoloCocinaMixin,LoginRequiredMixin, DeleteView):
     model = MinutaDia
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('comedor:minuta_lista')
