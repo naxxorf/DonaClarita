@@ -55,8 +55,9 @@
                             Admin
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">🚚 Proveedores</a></li>
-                            <li><a class="dropdown-item" href="#">📦 Órdenes de Pedido</a></li>
+                            <li><a class="dropdown-item" href="{% url 'administracion:proveedor_lista' %}">🚚 Proveedores</a></li>
+                            <li><a class="dropdown-item" href="{% url 'administracion:pedido_lista' %}">📦 Órdenes de Pedido</a></li>
+                            
                             <li><a class="dropdown-item" href="#">🧾 Facturación</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">👤 Empleados</a></li>
