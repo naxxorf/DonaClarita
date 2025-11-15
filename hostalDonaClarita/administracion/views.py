@@ -2,7 +2,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Proveedor, OrdenPedido, Producto
-from .forms import ProveedorForm, OrdenPedidoForm # Crearemos este archivo en el paso 2
+from .forms import ProveedorForm, OrdenPedidoForm 
+from hostalDonaClarita.mixins import SoloBodegaMixin
 
 TEMPLATE_FORM = 'administracion/generico_form.html' # Usaremos un template genérico nuevo
 TEMPLATE_DELETE = 'administracion/generico_confirm_delete.html'
@@ -10,12 +11,12 @@ TEMPLATE_DELETE = 'administracion/generico_confirm_delete.html'
 # ===============================================
 # GESTIÓN DE PROVEEDORES
 # ===============================================
-class ProveedorListView(LoginRequiredMixin, ListView):
+class ProveedorListView(SoloBodegaMixin,LoginRequiredMixin, ListView):
     model = Proveedor
     template_name = 'administracion/proveedor_lista.html'
     context_object_name = 'proveedores'
 
-class ProveedorCreateView(LoginRequiredMixin, CreateView):
+class ProveedorCreateView(SoloBodegaMixin,LoginRequiredMixin, CreateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = TEMPLATE_FORM
@@ -27,7 +28,7 @@ class ProveedorCreateView(LoginRequiredMixin, CreateView):
         context['cancel_url'] = reverse_lazy('administracion:proveedor_lista')
         return context
 
-class ProveedorUpdateView(LoginRequiredMixin, UpdateView):
+class ProveedorUpdateView(SoloBodegaMixin,LoginRequiredMixin, UpdateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = TEMPLATE_FORM
@@ -39,7 +40,7 @@ class ProveedorUpdateView(LoginRequiredMixin, UpdateView):
         context['cancel_url'] = reverse_lazy('administracion:proveedor_lista')
         return context
 
-class ProveedorDeleteView(LoginRequiredMixin, DeleteView):
+class ProveedorDeleteView(SoloBodegaMixin,LoginRequiredMixin, DeleteView):
     model = Proveedor
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('administracion:proveedor_lista')
@@ -52,12 +53,12 @@ class ProveedorDeleteView(LoginRequiredMixin, DeleteView):
 # ===============================================
 # GESTIÓN DE PEDIDOS
 # ===============================================
-class OrdenPedidoListView(LoginRequiredMixin, ListView):
+class OrdenPedidoListView(SoloBodegaMixin,LoginRequiredMixin, ListView):
     model = OrdenPedido
     template_name = 'administracion/pedido_lista.html'
     context_object_name = 'pedidos'
 
-class OrdenPedidoCreateView(LoginRequiredMixin, CreateView):
+class OrdenPedidoCreateView(SoloBodegaMixin,LoginRequiredMixin, CreateView):
     model = OrdenPedido
     form_class = OrdenPedidoForm
     template_name = TEMPLATE_FORM

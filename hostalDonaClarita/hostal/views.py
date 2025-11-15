@@ -12,6 +12,7 @@ from django.views.generic import (
 from .models import Habitacion, Cliente, Huesped, OrdenDeCompra
 from comedor.models import MinutaDia, Plato
 from .forms import OrdenDeCompraForm, HuespedForm, ClienteForm, HabitacionForm
+from hostalDonaClarita.mixins import SoloRecepcionMixin
 
 # ===============================================
 # Vistas Genéricas (para no repetir plantillas)
@@ -24,12 +25,12 @@ TEMPLATE_DELETE = 'hostal/generico_confirm_delete.html'
 # Vistas de HABITACIÓN
 # ===============================================
 
-class HabitacionListView(LoginRequiredMixin, ListView):
+class HabitacionListView(SoloRecepcionMixin,LoginRequiredMixin, ListView):
     model = Habitacion
     template_name = 'hostal/habitacion_lista.html' 
     context_object_name = 'object_list'
 
-class HabitacionCreateView(LoginRequiredMixin, CreateView):
+class HabitacionCreateView(SoloRecepcionMixin,LoginRequiredMixin, CreateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
     form_class = HabitacionForm
@@ -42,7 +43,7 @@ class HabitacionCreateView(LoginRequiredMixin, CreateView):
         context['cancel_url'] = reverse_lazy('habitacion_lista')
         return context
 
-class HabitacionUpdateView(LoginRequiredMixin, UpdateView):
+class HabitacionUpdateView(SoloRecepcionMixin,LoginRequiredMixin, UpdateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
     form_class = HabitacionForm
@@ -55,7 +56,7 @@ class HabitacionUpdateView(LoginRequiredMixin, UpdateView):
         context['cancel_url'] = reverse_lazy('habitacion_lista')
         return context
 
-class HabitacionDeleteView(LoginRequiredMixin, DeleteView):
+class HabitacionDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
     model = Habitacion
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('habitacion_lista')
@@ -71,12 +72,12 @@ class HabitacionDeleteView(LoginRequiredMixin, DeleteView):
 # Vistas de CLIENTE (Empresa)
 # ===============================================
 
-class ClienteListView(LoginRequiredMixin, ListView):
+class ClienteListView(SoloRecepcionMixin,LoginRequiredMixin, ListView):
     model = Cliente
     template_name = 'hostal/cliente_lista.html' 
     context_object_name = 'object_list'
 
-class ClienteCreateView(LoginRequiredMixin, CreateView):
+class ClienteCreateView(SoloRecepcionMixin,LoginRequiredMixin, CreateView):
     model = Cliente
     template_name = TEMPLATE_FORM
     form_class = ClienteForm
@@ -89,7 +90,7 @@ class ClienteCreateView(LoginRequiredMixin, CreateView):
         context['cancel_url'] = reverse_lazy('cliente_lista')
         return context
 
-class ClienteUpdateView(LoginRequiredMixin, UpdateView):
+class ClienteUpdateView(SoloRecepcionMixin,LoginRequiredMixin, UpdateView):
     model = Cliente
     template_name = TEMPLATE_FORM
     form_class = ClienteForm
@@ -102,7 +103,7 @@ class ClienteUpdateView(LoginRequiredMixin, UpdateView):
         context['cancel_url'] = reverse_lazy('cliente_lista')
         return context
 
-class ClienteDeleteView(LoginRequiredMixin, DeleteView):
+class ClienteDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
     model = Cliente
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('cliente_lista')
@@ -118,12 +119,12 @@ class ClienteDeleteView(LoginRequiredMixin, DeleteView):
 # Vistas de HUÉSPED
 # ===============================================
 
-class HuespedListView(LoginRequiredMixin, ListView):
+class HuespedListView(SoloRecepcionMixin,LoginRequiredMixin, ListView):
     model = Huesped
     template_name = 'hostal/huesped_lista.html'
     context_object_name = 'object_list'
 
-class HuespedCreateView(LoginRequiredMixin, CreateView):
+class HuespedCreateView(SoloRecepcionMixin,LoginRequiredMixin, CreateView):
     model = Huesped
     template_name = TEMPLATE_FORM
     form_class = HuespedForm
@@ -136,7 +137,7 @@ class HuespedCreateView(LoginRequiredMixin, CreateView):
         context['cancel_url'] = reverse_lazy('huesped_lista')
         return context
 
-class HuespedUpdateView(LoginRequiredMixin, UpdateView):
+class HuespedUpdateView(SoloRecepcionMixin,LoginRequiredMixin, UpdateView):
     model = Huesped
     template_name = TEMPLATE_FORM
     form_class = HuespedForm
@@ -149,7 +150,7 @@ class HuespedUpdateView(LoginRequiredMixin, UpdateView):
         context['cancel_url'] = reverse_lazy('huesped_lista')
         return context
 
-class HuespedDeleteView(LoginRequiredMixin, DeleteView):
+class HuespedDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
     model = Huesped
     template_name = TEMPLATE_DELETE
     success_url = reverse_lazy('huesped_lista')
@@ -166,12 +167,12 @@ class HuespedDeleteView(LoginRequiredMixin, DeleteView):
     # Vistas de ORDEN DE COMPRA
     # ===============================================
 
-class OrdenDeCompraListView(LoginRequiredMixin,ListView):
+class OrdenDeCompraListView(SoloRecepcionMixin,LoginRequiredMixin,ListView):
     model = OrdenDeCompra
     template_name = 'hostal/orden_lista.html' 
     context_object_name = 'ordenes'
 
-class OrdenDeCompraCreateView(LoginRequiredMixin,CreateView):
+class OrdenDeCompraCreateView(SoloRecepcionMixin,LoginRequiredMixin,CreateView):
     model = OrdenDeCompra
     form_class = OrdenDeCompraForm
     template_name = 'hostal/generico_form.html' 
