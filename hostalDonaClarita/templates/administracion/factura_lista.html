@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestión de Facturación - Hostal Doña Clarita{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Gestión de Facturación</h1>
+        <a href="#" class="btn btn-primary">
+            + Nueva Factura
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>N° Documento</th>
+                        <th>Cliente / Razón Social</th>
+                        <th>Fecha Emisión</th>
+                        <th>Monto Total</th>
+                        <th>Estado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for factura in facturas %}
+                    <tr>
+                        <td class="fw-bold">#{{ factura.id }}</td>
+                        <td>{{ factura.cliente.razon_social }}</td>
+                        <td>{{ factura.fecha_emision|date:"d/m/Y" }}</td>
+                        <td>${{ factura.total|floatformat:0 }}</td>
+                        <td>
+                            {% if factura.estado == 'PAGADA' %}
+                                <span class="badge bg-success">Pagada</span>
+                            {% elif factura.estado == 'PENDIENTE' %}
+                                <span class="badge bg-warning text-dark">Pendiente</span>
+                            {% elif factura.estado == 'ANULADA' %}
+                                <span class="badge bg-danger">Anulada</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ factura.estado }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="#" class="btn btn-sm btn-outline-primary">
+                                Ver Detalle
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-danger">
+                                Anular
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No hay facturas registradas en el sistema.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

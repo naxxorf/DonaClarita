@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Proveedor, OrdenPedido, Producto, Empleado
+from .models import Proveedor, OrdenPedido, Producto, Empleado, Factura
 from .forms import ProveedorForm, OrdenPedidoForm, EmpleadoRegistroForm, EmpleadoEditarForm
 from hostalDonaClarita.mixins import SoloBodegaMixin , SoloAdminMixin
 
@@ -50,6 +50,19 @@ class ProveedorDeleteView(SoloBodegaMixin,LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Eliminar Proveedor: {self.object.razon_social}"
         return context
+    
+# ===============================================
+# GESTIÓN DE FACTURACIÓN
+# ===============================================
+
+class FacturaListView(SoloAdminMixin, LoginRequiredMixin, ListView):
+    model = Factura
+    template_name = 'administracion/factura_lista.html'
+    context_object_name = 'facturas'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset
 
 # ===============================================
 # GESTIÓN DE PEDIDOS

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Proveedor, FamiliaProducto, Producto, OrdenPedido, DetallePedido, Empleado
+from .models import Proveedor, FamiliaProducto, Producto, OrdenPedido, DetallePedido, Empleado, Factura
 
 
 class DetallePedidoInline(admin.TabularInline):
@@ -25,3 +25,11 @@ class EmpleadoAdmin(admin.ModelAdmin):
     list_display = ('user', 'rut', 'rol', 'telefono')
     list_filter = ('rol',)
     search_fields = ('user__username', 'rut')
+    
+@admin.register(Factura)
+class FacturaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'cliente', 'fecha_emision', 'total', 'estado')
+    list_filter = ('estado', 'fecha_emision')
+    search_fields = ('cliente__razon_social', 'id')
+    list_editable = ('estado',)
+    autocomplete_fields = ['cliente']

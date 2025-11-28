@@ -13,11 +13,12 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body class="d-flex flex-column min-vh-100 bg-light">
+<body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: transparent;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'hostal:dashboard' %}">🏨 Hostal Doña Clarita</a>
+            <a class="navbar-brand" href="{% url 'hostal:dashboard' %}">
+                <img src="{% static 'imagenes/donaclarita.png' %}" alt="Logo Hostal" height="200" class="d-inline-block align-text-top"></a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -29,24 +30,24 @@
                     
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            🛏️ Hostal
+                            Hostal
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'hostal:cliente_lista' %}">👥 Clientes</a></li>
-                            <li><a class="dropdown-item" href="{% url 'hostal:habitacion_lista' %}">🛏️ Habitaciones</a></li>
-                            <li><a class="dropdown-item" href="{% url 'hostal:huesped_lista' %}">🧳 Huéspedes</a></li>
+                            <li><a class="dropdown-item" href="{% url 'hostal:cliente_lista' %}">Clientes</a></li>
+                            <li><a class="dropdown-item" href="{% url 'hostal:habitacion_lista' %}">Habitaciones</a></li>
+                            <li><a class="dropdown-item" href="{% url 'hostal:huesped_lista' %}">Huéspedes</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'hostal:orden_lista' %}">📋 Órdenes de Compra</a></li>
+                            <li><a class="dropdown-item" href="{% url 'hostal:orden_lista' %}">Órdenes de Compra</a></li>
                         </ul>
                     </li>
                     
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            🍽️ Comedor
+                            Comedor
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'comedor:plato_lista' %}">🍲 Platos</a></li>
-                            <li><a class="dropdown-item" href="{% url 'comedor:minuta_lista' %}">🗓️ Minutas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'comedor:plato_lista' %}">Platos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'comedor:minuta_lista' %}">Minutas</a></li>
                         </ul>
                     </li>
 
@@ -55,18 +56,17 @@
                             Admin
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'administracion:proveedor_lista' %}">🚚 Proveedores</a></li>
-                            <li><a class="dropdown-item" href="{% url 'administracion:pedido_lista' %}">📦 Órdenes de Pedido</a></li>
-                            
-                            <li><a class="dropdown-item" href="#">🧾 Facturación</a></li>
+                            <li><a class="dropdown-item" href="{% url 'administracion:proveedor_lista' %}">Proveedores</a></li>
+                            <li><a class="dropdown-item" href="{% url 'administracion:pedido_lista' %}">Órdenes de Pedido</a></li>
+                            <li><a class="dropdown-item" href="{% url 'administracion:factura_lista' %}">Facturación</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'administracion:empleado_lista' %}">👤 Empleados</a></li>
+                            <li><a class="dropdown-item" href="{% url 'administracion:empleado_lista' %}">Empleados</a></li>
                         </ul>
                     </li>
 
                     {% if user.is_superuser %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin">⚙️ administracion</a>
+                            <a class="nav-link" href="/admin">administracion</a>
                         </li>
                     {% endif %}
 
@@ -103,7 +103,7 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
         
         {% if messages %}
             {% for message in messages %}
@@ -126,11 +126,10 @@
             {% block content %}
             {% endblock %}
         </main>
-
-        <footer class="container text-center mt-5 py-3 border-top">
-            <p class="text-muted">&copy; 2025 Hostal Doña Clarita. Todos los derechos reservados.</p>
-        </footer>
     </div>
+    <footer class="container text-center mt-auto py-3 border-top">
+        <p class="text-muted">&copy; 2025 Hostal Doña Clarita. Todos los derechos reservados.</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -139,3 +138,4 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+  

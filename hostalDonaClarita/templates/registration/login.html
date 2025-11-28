@@ -1,28 +1,57 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h3 class="card-title">Iniciar Sesión</h3>
-            </div>
-            <div class="card-body">
-                {% if form.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        Tu usuario o contraseña son incorrectos.
-                    </div>
-                {% endif %}
+<div class="container mt-5 mb-5">
+    <div class="row align-items-center justify-content-center">
+        
+        <div class="col-md-6 d-none d-md-block text-center">
+            <img src="{% static 'imagenes/recepcion.jpg' %}" 
+                 alt="Bienvenido al Hostal" 
+                 class="img-fluid rounded shadow-lg login-img">
+        </div>
 
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-                </form>
+        <div class="col-md-5 offset-md-1">
+            <div class="card shadow border-0 card-login">
+                
+                <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                    <h3 class="fw-bold text-dark">Iniciar Sesión</h3>
+                    <p class="text-muted small">Ingresa tus credenciales de acceso</p>
+                </div>
+
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            Usuario o contraseña incorrectos.
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Usuario</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Contraseña</label>
+                            {{ form.password }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 py-2 fs-5 mt-3">
+                            Ingresar al Sistema
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="card-footer bg-light text-center py-3 border-0">
+                    <small class="text-muted">¿Olvidaste tu contraseña? Contacta al administrador.</small>
+                </div>
             </div>
         </div>
+        
     </div>
 </div>
 {% endblock %}

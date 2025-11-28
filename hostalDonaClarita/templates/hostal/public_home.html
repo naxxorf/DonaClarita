@@ -5,25 +5,79 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h2 class="text-center mb-4">Bienvenido a Hostal Doña Clarita</h2>
-            <div class="card shadow-sm h-100">
-                <div class="card-header small text-uppercase fw-bold p-3">
-                    🍽️ Minuta del Día ({{ fecha_hoy|date:"l, d M Y" }})
+            
+            <img src="{% static 'imagenes/Bienvenido.png' %}" 
+                class="img-fluid w-100 rounded mb-5 pb-4" 
+                alt="Bienvenidos a Hostal Doña Clarita"
+                style="max-height: 400px; object-fit: cover;">
+
+            <div class="row mb-5 text-center">
+                
+                <div class="col-md-4 mb-5 pb-4">
+                    <img src="{% static 'imagenes/casino.jpg' %}" 
+                         class="img-fluid rounded lift-img" 
+                         alt="Imagen 1">
                 </div>
-                <div class="card-body p-3">
-                    {% if platos_del_dia %}
-                        <ul class="list-unstyled mb-0">
-                        {% for plato in platos_del_dia %}
-                            <li>
-                                <strong>{{ plato.get_tipo_display }}:</strong> {{ plato.nombre }}
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-muted mb-0">No hay minuta registrada para hoy.</p>
-                    {% endif %}
+                <div class="col-md-4 mb-5 pb-4">
+                    <img src="{% static 'imagenes/entrada.jpg' %}" 
+                         class="img-fluid rounded lift-img" 
+                         alt="Imagen 2">
                 </div>
+
+                <div class="col-md-4 mb-5 pb-4">
+                    <img src="{% static 'imagenes/pieza_4.jpg' %}" 
+                         class="img-fluid rounded lift-img" 
+                         alt="Imagen 3">
+                </div>
+
+                <div id="galeriaHostal" class="carousel slide mb-5 pb-4 shadow-sm" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    
+                    <div class="carousel-item active" data-bs-interval="3000">
+                        <img src="{% static 'imagenes/pieza_1.jpg' %}" class="d-block w-100 carousel-img" alt="Foto 1">
+                    </div>
+                    
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{% static 'imagenes/pieza_2.jpg' %}" class="d-block w-100 carousel-img" alt="Foto 2">
+                    </div>
+
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{% static 'imagenes/pieza_2p.jpg' %}" class="d-block w-100 carousel-img" alt="Foto 3">
+                    </div>
+
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{% static 'imagenes/pieza_4.jpg' %}" class="d-block w-100 carousel-img" alt="Foto 4">
+                    </div>
+
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{% static 'imagenes/pieza_5.jpg' %}" class="d-block w-100 carousel-img" alt="Foto 5">
+                    </div>
+
+                    <div class="carousel-item" data-bs-interval="3000">
+                        <img src="{% static 'imagenes/pieza_6.jpg' %}" class="d-block w-100 carousel-img" alt="Foto 6">
+                    </div>
+
+                </div>
+                
+                <button class="carousel-control-prev" type="button" data-bs-target="#galeriaHostal" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#galeriaHostal" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
             </div>
+
+            <div class="contact-box mb-5">
+                <h4 class="fw-bold">¿Interesado en nuestros servicios?</h4>
+                <p class="mb-2">Para solicitudes especiales o convenios de empresa, por favor contacte a un vendedor.</p>
+                <hr>
+                <p class="mb-0 fs-5">
+                    Correo de contacto: <a href="mailto:contacto@hostaldonaclarita.cl" class="fw-bold text-decoration-none" style="color: inherit;">contacto@hostaldonaclarita.cl</a>
+                </p>
+            </div>
+
         </div>
     </div>
 </div>
