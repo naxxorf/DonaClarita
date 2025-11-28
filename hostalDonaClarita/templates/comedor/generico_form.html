@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-8 offset-md-2">
+    <div class="col-md-8 offset-md-2 mb-5 pb-4">
         <div class="card shadow-sm">
             <div class="card-header">
                 <h3>{{ titulo }}</h3>
@@ -12,12 +12,12 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
-                   {% crispy form %}
+                    {{ form|crispy }}
                     
                     <hr>
                     <div class="d-flex justify-content-between">
                         <a href="{{ request.META.HTTP_REFERER|default:cancel_url }}" class="btn btn-secondary">Cancelar</a>
-                        <button type"submit" class="btn btn-primary">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                     </div>
                 </form>
             </div>

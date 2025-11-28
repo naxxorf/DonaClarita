@@ -34,32 +34,32 @@ class HabitacionCreateView(SoloRecepcionMixin,LoginRequiredMixin, CreateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
     form_class = HabitacionForm
-    success_url = reverse_lazy('habitacion_lista')
+    success_url = reverse_lazy('hostal:habitacion_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Crear Nueva Habitación"
-        context['cancel_url'] = reverse_lazy('habitacion_lista')
+        context['cancel_url'] = reverse_lazy('hostal:habitacion_lista')
         return context
 
 class HabitacionUpdateView(SoloRecepcionMixin,LoginRequiredMixin, UpdateView):
     model = Habitacion
     template_name = TEMPLATE_FORM
     form_class = HabitacionForm
-    success_url = reverse_lazy('habitacion_lista')
+    success_url = reverse_lazy('hostal:habitacion_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Habitación: {self.object.numero}"
-        context['cancel_url'] = reverse_lazy('habitacion_lista')
+        context['cancel_url'] = reverse_lazy('hostal:habitacion_lista')
         return context
 
 class HabitacionDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
     model = Habitacion
     template_name = TEMPLATE_DELETE
-    success_url = reverse_lazy('habitacion_lista')
+    success_url = reverse_lazy('hostal:habitacion_lista')
 
     
     def get_context_data(self, **kwargs):
@@ -81,32 +81,32 @@ class ClienteCreateView(SoloRecepcionMixin,LoginRequiredMixin, CreateView):
     model = Cliente
     template_name = TEMPLATE_FORM
     form_class = ClienteForm
-    success_url = reverse_lazy('cliente_lista')
+    success_url = reverse_lazy('hostal:cliente_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Crear Nuevo Cliente (Empresa)"
-        context['cancel_url'] = reverse_lazy('cliente_lista')
+        context['cancel_url'] = reverse_lazy('hostal:cliente_lista')
         return context
 
 class ClienteUpdateView(SoloRecepcionMixin,LoginRequiredMixin, UpdateView):
     model = Cliente
     template_name = TEMPLATE_FORM
     form_class = ClienteForm
-    success_url = reverse_lazy('cliente_lista')
+    success_url = reverse_lazy('hostal:cliente_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Cliente: {self.object.razon_social}"
-        context['cancel_url'] = reverse_lazy('cliente_lista')
+        context['cancel_url'] = reverse_lazy('hostal:cliente_lista')
         return context
 
 class ClienteDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
     model = Cliente
     template_name = TEMPLATE_DELETE
-    success_url = reverse_lazy('cliente_lista')
+    success_url = reverse_lazy('hostal:cliente_lista')
     
     
     def get_context_data(self, **kwargs):
@@ -128,39 +128,39 @@ class HuespedCreateView(SoloRecepcionMixin,LoginRequiredMixin, CreateView):
     model = Huesped
     template_name = TEMPLATE_FORM
     form_class = HuespedForm
-    success_url = reverse_lazy('huesped_lista')
+    success_url = reverse_lazy('hostal:huesped_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = "Registrar Check-in de Huésped"
-        context['cancel_url'] = reverse_lazy('huesped_lista')
+        context['cancel_url'] = reverse_lazy('hostal:huesped_lista')
         return context
 
 class HuespedUpdateView(SoloRecepcionMixin,LoginRequiredMixin, UpdateView):
     model = Huesped
     template_name = TEMPLATE_FORM
     form_class = HuespedForm
-    success_url = reverse_lazy('huesped_lista')
+    success_url = reverse_lazy('hostal:huesped_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Editar Huésped: {self.object.nombre_completo}"
-        context['cancel_url'] = reverse_lazy('huesped_lista')
+        context['cancel_url'] = reverse_lazy('hostal:huesped_lista')
         return context
 
 class HuespedDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
     model = Huesped
     template_name = TEMPLATE_DELETE
-    success_url = reverse_lazy('huesped_lista')
+    success_url = reverse_lazy('hostal:huesped_lista')
     
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Eliminar Huésped: {self.object.nombre_completo}"
         context['mensaje_confirmacion'] = f"¿Está seguro de que desea eliminar al huésped {self.object.nombre_completo}?"
-        context['cancel_url'] = reverse_lazy('huesped_lista')
+        context['cancel_url'] = reverse_lazy('hostal:huesped_lista')
         return context
     
     # ===============================================
@@ -176,13 +176,13 @@ class OrdenDeCompraCreateView(SoloRecepcionMixin,LoginRequiredMixin,CreateView):
     model = OrdenDeCompra
     form_class = OrdenDeCompraForm
     template_name = 'hostal/generico_form.html' 
-    success_url = reverse_lazy('orden_lista')
+    success_url = reverse_lazy('hostal:orden_lista')
 
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = 'Cargar Nueva Orden de Compra'
-        context['cancel_url'] = reverse_lazy('orden_lista')
+        context['cancel_url'] = reverse_lazy('hostal:orden_lista')
         return context
     
 # ===============================================

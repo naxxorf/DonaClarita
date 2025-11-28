@@ -19,7 +19,7 @@
                         <th>Código de OC</th>
                         <th>Fecha de Emisión</th>
                         <th>Archivo (Excel)</th>
-                        </tr>
+                    </tr>
                 </thead>
                 <tbody>
                     {% for orden in ordenes %}
@@ -29,7 +29,7 @@
                         <td>{{ orden.fecha_emision }}</td>
                         <td>
                             {% if orden.lista_huespedes_excel %}
-                                <a href="{{ hostal:orden.lista_huespedes_excel.url }}" target="_blank">
+                                <a href="{{ orden.lista_huespedes_excel.url }}" target="_blank">
                                     Descargar Lista
                                 </a>
                             {% else %}

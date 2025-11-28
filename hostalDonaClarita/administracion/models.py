@@ -93,3 +93,30 @@ class Empleado(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.get_rol_display()})"    
+    
+# ===============================================
+# 5. FACTURACIÓN
+# ===============================================
+class Factura(models.Model):
+    ESTADOS_FACTURA = [
+        ('PENDIENTE', 'Pendiente'),
+        ('PAGADA', 'Pagada'),
+        ('ANULADA', 'Anulada'),
+    ]
+    
+    # Usamos 'hostal.Cliente' como string para referenciar el modelo de la otra app
+    cliente = models.ForeignKey('hostal.Cliente', on_delete=models.PROTECT, related_name='facturas')
+    fecha_emision = models.DateTimeField(auto_now_add=True)
+    fecha_vencimiento = models.DateField(null=True, blank=True)
+    total = models.DecimalField(max_digits=12, decimal_places=0, help_text="Monto total en pesos")
+    estado = models.CharField(max_length=20, choices=ESTADOS_FACTURA, default='PENDIENTE')
+    archivo = models.FileField(upload_to='facturas/', blank=True, null=True)
+    observaciones = models.TextField(blank=True)
+    class Meta:
+        ordering = ['-fecha_emision']
+        verbose_name = "Factura"
+        verbose_name_plural = "Facturas"
+
+    def __str__(self):
+        return f"Factura #{self.id} - {self.cliente.razon_social} (${self.total})"
+    
