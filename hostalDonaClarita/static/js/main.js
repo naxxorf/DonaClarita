@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
        PREVIEW DE ARCHIVOS
        ============================================ */
     initFilePreview();
+
+    initScrollNavbar();
 });
 
 /* ============================================
@@ -62,6 +64,30 @@ function initAutoCloseMessages() {
             });
         }
     });
+}
+
+/* ============================================
+   FUNCIÓN: COLAPSAR NAVBAR AL BAJAR
+   Convierte el menú en botón al hacer scroll
+   ============================================ */
+function initScrollNavbar() {
+    const navbar = document.querySelector('.navbar');
+    
+    // Solo ejecutamos si existe la barra de navegación
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            
+            // Si hemos bajado más de 100 pixeles
+            if (window.scrollY > 100) {
+                // Quitamos la clase 'expand' para forzar el modo móvil (botón)
+                navbar.classList.remove('navbar-expand-lg');
+            } else {
+                // Si volvemos arriba, restauramos el menú completo
+                navbar.classList.add('navbar-expand-lg');
+            }
+            
+        });
+    }
 }
 
 /* ============================================

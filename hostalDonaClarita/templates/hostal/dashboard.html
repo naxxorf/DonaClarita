@@ -7,12 +7,14 @@
 
 {% block content %}
 <div class="container-fluid mt-4">
+
+    <h3 class="mb-3">Estado General de Habitaciones</h3>
     
     <div class="row g-3 mb-3">
         <div class="col-12">
             <div class="card shadow-sm text-center">
                 <div class="card-body">
-                    <h5 class="card-title text-uppercase text-muted small">📈 Ocupación Total</h5>
+                    <h5 class="card-title text-uppercase text-muted small">Ocupación Total</h5>
                     <div class="display-6 fw-bold">
                         {{ porcentaje_ocupacion|floatformat:0 }}%
                     </div>
@@ -71,7 +73,7 @@
         <div class="col-12">
             <div class="card shadow-sm h-100">
                 <div class="card-header small text-uppercase fw-bold p-3">
-                    🍽️ Minuta del Día ({{ fecha_hoy|date:"l, d M Y" }})
+                    Minuta del Día ({{ fecha_hoy|date:"l, d M Y" }})
                 </div>
                 <div class="card-body p-3" style="max-height: 200px; overflow-y: auto;">
                     {% if platos_del_dia %}
@@ -89,8 +91,6 @@
             </div>
         </div>
     </div>
-
-    <h3 class="mb-3">Estado General de Habitaciones</h3>
     
     <div class="room-grid">
         {% for habitacion in habitaciones_lista %}

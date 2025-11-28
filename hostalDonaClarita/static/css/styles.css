@@ -9,15 +9,33 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #2d3250;
     min-height: 100vh;
     padding: 20px;
-    color: #333;
+    color: #f9b17a;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
+}
+
+.navbar:not(.navbar-expand-lg) {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 5px 20px;
+    transition: all 0.3s ease;
+}
+
+/* ============================================
+   PERSONALIZACIÓN DEL NAVBAR
+   ============================================ */
+
+.navbar-nav .nav-link {
+    font-size: 20px;
+}
+
+.dropdown-item {
+    font-size: 18px;
 }
 
 /* ============================================
@@ -50,9 +68,12 @@ nav {
     margin-top: 20px;
 }
 
+.btn-primary, 
+.btn-submit, 
+.btn-search,
 nav .nav-btn {
     padding: 10px 20px;
-    background: #667eea;
+    background: #f9b17a !important;
     color: white;
     border: none;
     border-radius: 8px;
@@ -63,14 +84,55 @@ nav .nav-btn {
     display: inline-block;
 }
 
+.btn-primary:hover, 
+.btn-submit:hover, 
+.btn-search:hover,
 nav .nav-btn:hover {
-    background: #5568d3;
+    background: #f9b17a !important;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px rgba(249, 177, 122, 0.4);
 }
 
 nav .nav-btn.active {
-    background: #764ba2;
+    background: #f9b17a;
+}
+
+/* ============================================
+   EFECTOS VISUALES (HOME PÚBLICO)
+   ============================================ */
+.lift-img {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    height: 650px;
+    object-fit: cover;
+}
+
+.lift-img:hover {
+    transform: translateY(-10px);
+}
+
+.carousel-img {
+    height: 300px;
+    object-fit: cover;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.contact-box {
+    background: #676f9d;
+    border: 2px solid #2d3250;  
+    color: #2d3250;             
+    
+    border-radius: 15px;        
+    padding: 30px;             
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.contact-box hr {
+    border-color: #f9b17a;
+    opacity: 0.5;
 }
 
 /* Información del usuario */
@@ -85,7 +147,7 @@ nav .nav-btn.active {
 
 .btn-logout {
     padding: 8px 16px;
-    background: #f44336;
+    background: #f9b17a;
     color: white;
     text-decoration: none;
     border-radius: 6px;
@@ -94,8 +156,37 @@ nav .nav-btn.active {
 }
 
 .btn-logout:hover {
-    background: #d32f2f;
+    background: #f9b17a;
 }
+
+/* ============================================
+   ESTILOS ESPECÍFICOS DEL LOGIN
+   ============================================ */
+
+.login-img {
+    max-height: 500px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.card-login input[type="text"], 
+.card-login input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: all 0.3s;
+}
+
+.card-login input[type="text"]:focus, 
+.card-login input[type="password"]:focus {
+    border-color: #676f9d;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(103, 111, 157, 0.1);
+}
+
 
 /* ============================================
    MENSAJES DEL SISTEMA (Django Messages)
@@ -262,19 +353,19 @@ nav .nav-btn.active {
 }
 
 .btn-edit {
-    background: #ffc107;
+    background: #f9b17a;
 }
 
 .btn-edit:hover {
-    background: #e0a800;
+    background: #f9b17a;
 }
 
 .btn-delete {
-    background: #f44336;
+    background: #f9b17a;
 }
 
 .btn-delete:hover {
-    background: #d32f2f;
+    background: #f9b17a;
 }
 
 /* ============================================
@@ -339,7 +430,8 @@ nav .nav-btn.active {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #f9b17a; 
+    box-shadow: 0 0 0 3px rgba(249, 177, 122, 0.2);
 }
 
 .form-group.has-error input,
@@ -401,7 +493,7 @@ nav .nav-btn.active {
 
 .btn-search {
     padding: 12px 24px;
-    background: #667eea;
+    background: #f9b17a;
     color: white;
     border: none;
     border-radius: 8px;
@@ -411,7 +503,7 @@ nav .nav-btn.active {
 }
 
 .btn-search:hover {
-    background: #5568d3;
+    background: #f9b17a;
 }
 
 .filter-form {
