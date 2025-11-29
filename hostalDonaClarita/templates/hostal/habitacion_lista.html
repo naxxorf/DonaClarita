@@ -17,14 +17,18 @@
                 <tr>
                     <th scope="col">Número</th>
                     <th scope="col">Estado</th>
-                    <th scope="col">Tipo de Cama</th>
+                    <th scope="col">Ocupación</th> <th scope="col">Tipo de Cama</th>
                     <th scope="col">Precio</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {% for habitacion in object_list %} <tr>
-                    <th scope="row">{{ habitacion.numero }}</th>
+                {% for habitacion in object_list %} 
+                <tr>
+                    <th scope="row">
+                        <span class="fs-5">{{ habitacion.numero }}</span>
+                    </th>
+                    
                     <td>
                         {% if habitacion.estado == 'D' %}
                             <span class="badge bg-success">{{ habitacion.get_estado_display }}</span>
@@ -37,7 +41,26 @@
                         {% elif habitacion.estado == 'L' %}
                             <span class="badge bg-secondary">{{ habitacion.get_estado_display }}</span>
                         {% endif %}
+
+                        {% if habitacion.bloqueada_ingreso %}
+                            <div class="mt-1">
+                                <span class="badge bg-dark border border-light">
+                                    Bloqueada
+                                </span>
+                            </div>
+                        {% endif %}
                     </td>
+
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold me-2">
+                                {{ habitacion.ocupantes.count }} / {{ habitacion.capacidad }}
+                            </span>
+                            👤
+                            
+                            </div>
+                    </td>
+
                     <td>{{ habitacion.tipo_cama }}</td>
                     <td>${{ habitacion.precio|floatformat:0 }}</td>
                     <td>
@@ -47,7 +70,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center text-muted">No hay habitaciones registradas.</td>
+                    <td colspan="6" class="text-center text-muted">No hay habitaciones registradas.</td>
                 </tr>
                 {% endfor %}
             </tbody>

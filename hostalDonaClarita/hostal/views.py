@@ -66,6 +66,7 @@ class HabitacionDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Eliminar Habitación: {self.object.numero}"
         context['mensaje_confirmacion'] = f"¿Está seguro de que desea eliminar la habitación {self.object.numero}?"
+        context['cancel_url'] = reverse_lazy('hostal:habitacion_lista')
         return context
 
 # ===============================================
@@ -113,6 +114,7 @@ class ClienteDeleteView(SoloRecepcionMixin,LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['titulo'] = f"Eliminar Cliente: {self.object.razon_social}"
         context['mensaje_confirmacion'] = f"¿Está seguro de que desea eliminar al cliente {self.object.razon_social}?"
+        context['cancel_url'] = reverse_lazy('hostal:cliente_lista')
         return context
 
 # ===============================================
