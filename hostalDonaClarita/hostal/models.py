@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 
 RUT_VALIDATOR = RegexValidator(r'^\d{7,8}-[0-9kK]$', 'Formato RUT inválido. Ej: 12345678-9')
 
@@ -38,7 +38,9 @@ class Habitacion(models.Model):
     estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='D', help_text="Estado de disponibilidad de la habitación")
     tipo_cama = models.CharField(max_length=100, help_text="Datos propios de la habitación")
     accesorios = models.TextField(blank=True, help_text="Accesorios de la habitación")
-    precio = models.DecimalField(max_digits=10, decimal_places=2, help_text="Precio de la habitación")
+    capacidad = models.PositiveIntegerField(default=1, help_text="Capacidad máxima de personas", validators=[MinValueValidator(1)])
+    precio = models.DecimalField(max_digits=10, decimal_places=2, help_text="Precio de la habitación", validators=[MinValueValidator(0)])
+    bloqueada_ingreso = models.BooleanField(default=False, verbose_name="Bloqueo de Ingreso", help_text="Si está activo, impide agregar nuevos huéspedes aunque haya capacidad.")
 
     class Meta:
         ordering = ['numero']
@@ -94,38 +96,39 @@ class Huesped(models.Model):
         return "❌ Sin Autorización"
     
     def save(self, *args, **kwargs):
-        
-        # 1. Obtenemos la habitación "antigua" (la que estaba en la BBDD)
+        # 1. Detectar habitación antigua
         old_habitacion = None
-        if self.pk: # Si el huésped ya existe (es una edición)
+        if self.pk:
             try:
-                # Buscamos el estado anterior del huésped
                 old_huesped = Huesped.objects.get(pk=self.pk)
                 old_habitacion = old_huesped.habitacion
             except Huesped.DoesNotExist:
-                pass # No debería pasar, pero por si acaso
-
-        # 2. Obtenemos la habitación "nueva" (la que se está asignando ahora)
+                pass
         new_habitacion = self.habitacion
 
-        # 3. Guardamos al huésped PRIMERO
+        # 2. Guardar el huésped
         super().save(*args, **kwargs)
 
-        # 4. Comparamos si la habitación cambió
-        if new_habitacion != old_habitacion:
-            
-            # 4a. Si hay una HABITACIÓN NUEVA, marcarla como Ocupada
-            if new_habitacion:
-                new_habitacion.estado = 'O'  # 'O' = Ocupada
-                new_habitacion.save(update_fields=['estado'])
+        # 3. LÓGICA DE ESTADOS (MODIFICADA: SIN BLOQUEO AUTOMÁTICO)
+        
+        # CASO A: Ingreso a nueva habitación
+        if new_habitacion:
+            # Solo cambiamos el estado visual a 'Ocupada' (O)
+            # YA NO tocamos 'bloqueada_ingreso' aquí. Es manual.
+            new_habitacion.estado = 'O' 
+            new_habitacion.save(update_fields=['estado'])
 
-            # 4b. Si había una HABITACIÓN ANTIGUA, marcarla para Limpieza
-            if old_habitacion:
-                # Revisamos si la habitación antigua quedó 100% vacía
-                # Usamos el related_name='ocupantes' que ya tenías
-                if not old_habitacion.ocupantes.exists():
-                    old_habitacion.estado = 'L'  # 'L' = Para Limpieza
-                    old_habitacion.save(update_fields=['estado'])
+        # CASO B: Salida de habitación antigua
+        if old_habitacion and old_habitacion != new_habitacion:
+            # Si la habitación quedó VACÍA
+            if not old_habitacion.ocupantes.exists():
+                old_habitacion.estado = 'L' # Para Limpieza
+                
+                # RECOMENDACIÓN: Es bueno resetear el bloqueo si queda vacía
+                # para no dejar habitaciones "fantasmas" bloqueadas sin nadie.
+                old_habitacion.bloqueada_ingreso = False 
+                
+                old_habitacion.save()
 
 # --- MODELOS PARA EL COMEDOR ---
 

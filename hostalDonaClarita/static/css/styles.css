@@ -42,6 +42,23 @@ body {
 }
 
 /* ============================================
+   PERSONALIZACIÓN DE MENÚS DESPLEGABLES
+   ============================================ */
+.dropdown-menu {
+    /* Blanco al 85% de opacidad (el último número controla la transparencia: 0 a 1) */
+    background-color: rgba(255, 255, 255, 0.356) !important; 
+    border: none; /* Quitamos el borde gris por defecto */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Sombra suave */
+    backdrop-filter: blur(5px); /* Efecto vidrio borroso (opcional, moderno) */
+}
+
+/* Color al pasar el mouse por una opción */
+.dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Gris muy suave */
+    color: #f9b17a; /* Texto negro */
+}
+
+/* ============================================
    HEADER Y NAVEGACIÓN
    ============================================ */
 header {
@@ -964,11 +981,11 @@ footer p {
     }
 
     .navbar-collapse {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.8);
         padding: 15px;
         border-radius: 10px;
         margin-top: 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        box-shadow: 0 4px 15px #424769;
     }
 
     .navbar-nav {
