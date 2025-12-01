@@ -11,9 +11,11 @@ class SoloRecepcionMixin(UserPassesTestMixin):
         return user.is_superuser or (hasattr(user, 'empleado_profile') and user.empleado_profile.rol in ['RECEPCION', 'ADMIN'])
 
     def handle_no_permission(self):
-        messages.error(self.request, "⛔ No tienes permisos de Recepción para ver esta página.")
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+        messages.error(self.request, "No tienes permisos de Recepción para ver esta página.")
         return redirect('hostal:dashboard')
-
+        
 class SoloCocinaMixin(UserPassesTestMixin):
     """ Solo permite acceso a Cocina y Administradores """
     def test_func(self):
@@ -22,9 +24,11 @@ class SoloCocinaMixin(UserPassesTestMixin):
         return user.is_superuser or (hasattr(user, 'empleado_profile') and user.empleado_profile.rol in ['COCINA', 'ADMIN'])
 
     def handle_no_permission(self):
-        messages.error(self.request, "⛔ Acceso denegado. Área exclusiva de Cocina.")
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+        messages.error(self.request, "Acceso denegado. Área exclusiva de Cocina.")
         return redirect('hostal:dashboard')
-
+    
 class SoloBodegaMixin(UserPassesTestMixin):
     """ Solo permite acceso a Bodega/Administración """
     def test_func(self):
@@ -33,7 +37,9 @@ class SoloBodegaMixin(UserPassesTestMixin):
         return user.is_superuser or (hasattr(user, 'empleado_profile') and user.empleado_profile.rol in ['BODEGA', 'ADMIN'])
 
     def handle_no_permission(self):
-        messages.error(self.request, "⛔ Acceso denegado. Área exclusiva de Administración.")
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+        messages.error(self.request, "No tienes permisos de Bodega para ver esta página.")
         return redirect('hostal:dashboard')
     
 class SoloAdminMixin(UserPassesTestMixin):
@@ -45,5 +51,7 @@ class SoloAdminMixin(UserPassesTestMixin):
         return u.is_active and (u.is_superuser or (hasattr(u, 'empleado_profile') and u.empleado_profile.rol == 'ADMIN'))
     
     def handle_no_permission(self):
-        messages.error(self.request, "⛔ Acceso restringido: Solo el Administrador puede gestionar personal.")
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+        messages.error(self.request, "Acceso denegado. Área exclusiva de Administración.")
         return redirect('hostal:dashboard')
