@@ -41,6 +41,7 @@ class Habitacion(models.Model):
     capacidad = models.PositiveIntegerField(default=1, help_text="Capacidad máxima de personas", validators=[MinValueValidator(1)])
     precio = models.DecimalField(max_digits=10, decimal_places=2, help_text="Precio de la habitación", validators=[MinValueValidator(0)])
     bloqueada_ingreso = models.BooleanField(default=False, verbose_name="Bloqueo de Ingreso", help_text="Si está activo, impide agregar nuevos huéspedes aunque haya capacidad.")
+    precio = models.DecimalField(max_digits=10, decimal_places=2, help_text="Precio de la habitación", validators=[MinValueValidator(0, message="El precio no puede ser negativo. Ingrese un valor mayor o igual a 0.")])
 
     class Meta:
         ordering = ['numero']
@@ -85,15 +86,15 @@ class Huesped(models.Model):
     
     @property
     def esta_autorizado(self):
-        # La validación es simple: ¿Tiene una OC asignada?
+
         return self.orden_de_compra_asociada is not None
 
     @property
     def estado_autorizacion_texto(self):
         if self.esta_autorizado:
-            return f"✅ Validado (OC: {self.orden_de_compra_asociada.codigo_orden})"
+            return f"Validado (OC: {self.orden_de_compra_asociada.codigo_orden})"
 
-        return "❌ Sin Autorización"
+        return "Sin Autorización"
     
     def save(self, *args, **kwargs):
         # 1. Detectar habitación antigua
@@ -109,23 +110,16 @@ class Huesped(models.Model):
         # 2. Guardar el huésped
         super().save(*args, **kwargs)
 
-        # 3. LÓGICA DE ESTADOS (MODIFICADA: SIN BLOQUEO AUTOMÁTICO)
-        
         # CASO A: Ingreso a nueva habitación
         if new_habitacion:
-            # Solo cambiamos el estado visual a 'Ocupada' (O)
-            # YA NO tocamos 'bloqueada_ingreso' aquí. Es manual.
             new_habitacion.estado = 'O' 
             new_habitacion.save(update_fields=['estado'])
 
         # CASO B: Salida de habitación antigua
         if old_habitacion and old_habitacion != new_habitacion:
-            # Si la habitación quedó VACÍA
             if not old_habitacion.ocupantes.exists():
-                old_habitacion.estado = 'L' # Para Limpieza
+                old_habitacion.estado = 'L'
                 
-                # RECOMENDACIÓN: Es bueno resetear el bloqueo si queda vacía
-                # para no dejar habitaciones "fantasmas" bloqueadas sin nadie.
                 old_habitacion.bloqueada_ingreso = False 
                 
                 old_habitacion.save()

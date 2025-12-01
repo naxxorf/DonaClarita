@@ -33,11 +33,11 @@ class HuespedForm(forms.ModelForm):
             # Si estamos agregando a alguien nuevo (no editando al mismo)
             es_nuevo_ingreso = True
             if self.instance.pk and self.instance.habitacion == habitacion:
-                es_nuevo_ingreso = False # Es el mismo huésped editando sus datos, no cuenta como nuevo
+                es_nuevo_ingreso = False 
 
             if es_nuevo_ingreso and habitacion.bloqueada_ingreso:
                 # AQUÍ ESTÁ TU MENSAJE PERSONALIZADO
-                self.add_error('habitacion', f"⛔ Habitación {habitacion.numero} ocupada y bloqueada para agregar huéspedes. Desbloquéela en 'Editar Habitación' si desea agregar más personas.")
+                self.add_error('habitacion', f"Habitación {habitacion.numero} ocupada y bloqueada para agregar huéspedes. Desbloquéela en 'Editar Habitación' si desea agregar más personas.")
                 return cleaned_data
 
             # 3. Validación de Capacidad Real (Respaldo final)
