@@ -288,3 +288,31 @@ pyrightconfig.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/django,visualstudiocode,python
+hostalDonaClarita/administracion/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/administracion/__pycache__/admin.cpython-312.pyc
+hostalDonaClarita/administracion/__pycache__/apps.cpython-312.pyc
+hostalDonaClarita/administracion/__pycache__/models.cpython-312.pyc
+hostalDonaClarita/administracion/migrations/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/admin.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/apps.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/forms.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/models.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/urls.cpython-312.pyc
+hostalDonaClarita/comedor/__pycache__/views.cpython-312.pyc
+hostalDonaClarita/comedor/migrations/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/comedor/migrations/__pycache__/0001_initial.cpython-312.pyc
+hostalDonaClarita/hostal/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/hostal/__pycache__/admin.cpython-312.pyc
+hostalDonaClarita/hostal/__pycache__/apps.cpython-312.pyc
+hostalDonaClarita/hostal/__pycache__/forms.cpython-312.pyc
+hostalDonaClarita/hostal/__pycache__/models.cpython-312.pyc
+hostalDonaClarita/hostal/__pycache__/views.cpython-312.pyc
+hostalDonaClarita/hostal/migrations/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/hostal/migrations/__pycache__/0001_initial.cpython-312.pyc
+hostalDonaClarita/hostal/migrations/__pycache__/0002_alter_cliente_razon_social_and_more.cpython-312.pyc
+hostalDonaClarita/hostal/migrations/__pycache__/0003_plato_minutadia.cpython-312.pyc
+hostalDonaClarita/hostalDonaClarita/__pycache__/__init__.cpython-312.pyc
+hostalDonaClarita/hostalDonaClarita/__pycache__/settings.cpython-312.pyc
+hostalDonaClarita/hostalDonaClarita/__pycache__/urls.cpython-312.pyc
+hostalDonaClarita/hostalDonaClarita/__pycache__/wsgi.cpython-312.pyc
