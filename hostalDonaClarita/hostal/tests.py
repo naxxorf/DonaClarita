@@ -209,3 +209,245 @@ class HuespedAutomationTest(TestCase):
         
         self.assertEqual(self.habitacion.estado, 'L', "La habitación vacía debería pasar a Limpieza ('L')")
         self.assertFalse(self.habitacion.bloqueada_ingreso, "El bloqueo de ingreso debería desactivarse")
+        
+# ==========================================
+# PRUEBA DE VISTA: Dashboard (Lógica y Contexto)
+# ==========================================
+class DashboardViewTest(TestCase):
+    def setUp(self):
+        # Usuario y Cliente
+        self.user = User.objects.create_user(username='recep_dash', password='123')
+        # Asignamos rol de recepción para que entre al dashboard logueado
+        # Nota: Dependiendo de tu mixin, quizas baste con estar logueado, 
+        # pero es mejor ser explícito si usas perfiles.
+        
+        # Creamos habitaciones para probar la matemática
+        # 2 Ocupadas, 1 Disponible = 3 Totales. Ocupación esperada: 66%
+        Habitacion.objects.create(numero="101", estado='O', precio=100, capacidad=1) # Ocupada
+        Habitacion.objects.create(numero="102", estado='A', precio=100, capacidad=1) # Asignada (cuenta como ocupada)
+        Habitacion.objects.create(numero="103", estado='D', precio=100, capacidad=1) # Disponible
+
+    def test_dashboard_contexto_logueado(self):
+        """
+        Prueba que el dashboard calcule bien el porcentaje de ocupación
+        y entregue las variables correctas al template.
+        """
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('hostal:dashboard'))
+        
+        self.assertEqual(response.status_code, 200)
+        
+        # Verificamos los cálculos matemáticos que hace tu vista
+        contexto = response.context
+        
+        # 2 ocupadas de 3 totales = 66.666... -> int(66.66) -> 66
+        # Nota: Ajusta esto según cómo redondees en tu vista (int o float)
+        self.assertEqual(contexto['total_habitaciones'], 3)
+        
+        # Verificamos que 'porcentaje_ocupacion' sea un número razonable (aprox 66)
+        # Usamos assertAlmostEqual por si hay decimales
+        self.assertAlmostEqual(contexto['porcentaje_ocupacion'], 66.6, delta=1.0)
+        
+        # Verificamos el conteo por estado
+        conteo = contexto['conteo_estados']
+        self.assertEqual(conteo['O']['total'], 1) # 1 Ocupada
+        self.assertEqual(conteo['A']['total'], 1) # 1 Asignada
+        self.assertEqual(conteo['D']['total'], 1) # 1 Disponible
+
+    def test_dashboard_anonimo(self):
+        """
+        Prueba que el usuario anónimo vea la versión pública (public_home)
+        y NO vea los datos de gestión interna.
+        """
+        response = self.client.get(reverse('hostal:dashboard'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'hostal/public_home.html')
+        
+        # El contexto NO debe tener datos sensibles
+        self.assertNotIn('porcentaje_ocupacion', response.context)
+        self.assertNotIn('habitaciones_lista', response.context)
+        
+# ==========================================
+# PRUEBA DE VISTAS: CRUD de Clientes (Empresas)
+# ==========================================
+class ClienteCRUDViewTest(TestCase):
+    def setUp(self):
+        # Usuario Recepcionista
+        self.user = User.objects.create_user(username='recep_cliente', password='123')
+        # Si usas perfiles, aquí deberías asignar el rol, pero el mixin de prueba
+        # a veces pasa si es superuser. Para ser estricto:
+        self.user.is_superuser = True 
+        self.user.save()
+        
+        # Cliente base para editar/borrar
+        self.cliente = Cliente.objects.create(
+            user=self.user,
+            razon_social="Empresa Base",
+            rut="55555555-5"
+        )
+
+    def test_crear_cliente_view(self):
+        """Prueba la vista de creación de clientes (POST)"""
+        self.client.force_login(self.user)
+        
+        # Necesitamos un usuario NUEVO para el nuevo cliente (relación 1 a 1)
+        otro_user = User.objects.create_user(username='nuevo_cliente_user', password='123')
+        
+        data = {
+            'user': otro_user.id,
+            'razon_social': 'Nueva Empresa SPA',
+            'rut': '66666666-6'
+        }
+        
+        url = reverse('hostal:cliente_crear')
+        response = self.client.post(url, data)
+        
+        # Debería redirigir a la lista tras éxito
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Cliente.objects.count(), 2)
+
+    def test_editar_cliente_view(self):
+        """Prueba la vista de edición (POST)"""
+        self.client.force_login(self.user)
+        
+        url = reverse('hostal:cliente_editar', args=[self.cliente.pk])
+        
+        # Cambiamos la razón social
+        data = {
+            'user': self.user.id,
+            'razon_social': 'Empresa Editada',
+            'rut': '55555555-5' # Mismo rut
+        }
+        
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        
+        self.cliente.refresh_from_db()
+        self.assertEqual(self.cliente.razon_social, 'Empresa Editada')
+        
+# ==========================================
+# PRUEBA DE VISTAS: Órdenes de Compra
+# ==========================================
+class OrdenCompraViewTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_superuser(username='recep_oc', password='123')
+        self.cliente = Cliente.objects.create(user=self.user, razon_social="Cliente OC", rut="77777777-7")
+
+    def test_crear_orden_view(self):
+        """Prueba que se pueda cargar una Orden de Compra desde la vista"""
+        self.client.force_login(self.user)
+        
+        url = reverse('hostal:orden_crear')
+        data = {
+            'cliente': self.cliente.id,
+            'codigo_orden': 'OC-2025-001',
+            # 'lista_huespedes_excel': (Opcional, se puede omitir para prueba simple)
+        }
+        
+        response = self.client.post(url, data)
+        
+        # Redirección exitosa
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(OrdenDeCompra.objects.filter(codigo_orden='OC-2025-001').exists())
+
+    def test_listar_ordenes(self):
+        """Prueba simple de que la lista carga"""
+        self.client.force_login(self.user)
+        OrdenDeCompra.objects.create(cliente=self.cliente, codigo_orden="OC-TEST-LIST")
+        
+        response = self.client.get(reverse('hostal:orden_lista'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "OC-TEST-LIST")
+        
+# ==========================================
+# PRUEBA FINAL: Cobertura Total de Vistas (Habitación y Huésped)
+# ==========================================
+class CoberturaTotalViewsTest(TestCase):
+    def setUp(self):
+        # Usuario con permisos
+        self.user = User.objects.create_superuser(username='super_tester', password='123')
+        self.client.force_login(self.user)
+        
+        # Datos base
+        self.habitacion = Habitacion.objects.create(numero="999", precio=1000, estado='D')
+        self.cliente_empresa = Cliente.objects.create(user=self.user, razon_social="Empresa X", rut="11111111-1")
+        self.huesped = Huesped.objects.create(
+            empresa=self.cliente_empresa, 
+            rut="22222222-2", 
+            nombre_completo="Juanito", 
+            habitacion=self.habitacion
+        )
+
+    # --- HABITACIONES (Faltaba probar Create/Update/Delete) ---
+
+    def test_habitacion_create_get(self):
+        """Prueba que la página de crear habitación cargue con su contexto correcto"""
+        resp = self.client.get(reverse('hostal:habitacion_crear'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.context['titulo'], "Crear Nueva Habitación")
+
+    def test_habitacion_update_get(self):
+        """Prueba que la página de editar habitación cargue"""
+        resp = self.client.get(reverse('hostal:habitacion_editar', args=[self.habitacion.pk]))
+        self.assertEqual(resp.status_code, 200)
+        # Verifica que el título dinámico (con el número) se genere bien
+        self.assertIn(f"Editar Habitación: {self.habitacion.numero}", resp.context['titulo'])
+
+    def test_habitacion_delete(self):
+        """Prueba la vista de confirmación (GET) y la eliminación real (POST)"""
+        # 1. GET: Ver la página de confirmación
+        resp_get = self.client.get(reverse('hostal:habitacion_eliminar', args=[self.habitacion.pk]))
+        self.assertEqual(resp_get.status_code, 200)
+        self.assertIn("Eliminar Habitación:", resp_get.context['titulo'])
+        
+        # 2. POST: Eliminarla
+        resp_post = self.client.post(reverse('hostal:habitacion_eliminar', args=[self.habitacion.pk]))
+        self.assertEqual(resp_post.status_code, 302) # Redirección
+        self.assertFalse(Habitacion.objects.filter(pk=self.habitacion.pk).exists())
+
+    # --- HUÉSPEDES (Faltaba probar Create/Update/Delete) ---
+
+    def test_huesped_create_get(self):
+        """Visitar formulario de crear huésped"""
+        resp = self.client.get(reverse('hostal:huesped_crear'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.context['titulo'], "Registrar Check-in de Huésped")
+
+    def test_huesped_update_get(self):
+        """Visitar formulario de editar huésped"""
+        resp = self.client.get(reverse('hostal:huesped_editar', args=[self.huesped.pk]))
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn(f"Editar Huésped: {self.huesped.nombre_completo}", resp.context['titulo'])
+
+    def test_huesped_delete(self):
+        """Borrar un huésped"""
+        # GET
+        resp_get = self.client.get(reverse('hostal:huesped_eliminar', args=[self.huesped.pk]))
+        self.assertEqual(resp_get.status_code, 200)
+        
+        # POST
+        resp_post = self.client.post(reverse('hostal:huesped_eliminar', args=[self.huesped.pk]))
+        self.assertEqual(resp_post.status_code, 302)
+        self.assertFalse(Huesped.objects.filter(pk=self.huesped.pk).exists())
+
+    # --- CLIENTES (Faltaba probar Delete) ---
+    
+    def test_cliente_delete(self):
+        """Borrar un cliente"""
+        # Creamos uno extra para borrar
+        cliente_borrar = Cliente.objects.create(
+            user=User.objects.create_user('borrar', 'b@b.cl', '123'), 
+            razon_social="Borrar SPA", 
+            rut="33333333-3"
+        )
+        
+        # GET (Confirmación)
+        resp_get = self.client.get(reverse('hostal:cliente_eliminar', args=[cliente_borrar.pk]))
+        self.assertEqual(resp_get.status_code, 200)
+        self.assertIn("Eliminar Cliente:", resp_get.context['titulo'])
+
+        # POST (Acción)
+        resp_post = self.client.post(reverse('hostal:cliente_eliminar', args=[cliente_borrar.pk]))
+        self.assertEqual(resp_post.status_code, 302)
+        self.assertFalse(Cliente.objects.filter(pk=cliente_borrar.pk).exists())
