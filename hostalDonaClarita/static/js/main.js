@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
        ============================================ */
     initFilePreview();
 
-    initScrollNavbar();
+   // initScrollNavbar();
 });
 
 /* ============================================
