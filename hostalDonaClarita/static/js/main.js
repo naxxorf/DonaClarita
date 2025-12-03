@@ -70,20 +70,20 @@ function initAutoCloseMessages() {
    FUNCIÓN: COLAPSAR NAVBAR AL BAJAR
    Convierte el menú en botón al hacer scroll
    ============================================ */
-function initScrollNavbar() {
+   function initScrollNavbar() {
     const navbar = document.querySelector('.navbar');
     
     // Solo ejecutamos si existe la barra de navegación
     if (navbar) {
         window.addEventListener('scroll', function() {
             
-            // Si hemos bajado más de 100 pixeles
-            if (window.scrollY > 100) {
-                // Quitamos la clase 'expand' para forzar el modo móvil (botón)
-                navbar.classList.remove('navbar-expand-lg');
+            // Si hemos bajado más de 50 pixeles
+            if (window.scrollY > 50) {
+                // Añadimos la clase personalizada para el fondo
+                navbar.classList.add('navbar-scrolled');
             } else {
-                // Si volvemos arriba, restauramos el menú completo
-                navbar.classList.add('navbar-expand-lg');
+                // Si volvemos arriba, quitamos la clase (vuelve a transparente)
+                navbar.classList.remove('navbar-scrolled');
             }
             
         });

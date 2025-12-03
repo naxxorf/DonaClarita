@@ -41,6 +41,15 @@ body {
     font-size: 18px;
 }
 
+.navbar.navbar-scrolled {
+    background-color: rgba(0, 0, 0, 0.9) !important; /* Fondo negro al 90% */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave */
+    transition: all 0.3s ease; /* Transición suave */
+    padding-top: 5px !important;    /* Opcional: hace la barra un poco más delgada */
+    padding-bottom: 5px !important;
+}
+
+
 /* ============================================
    PERSONALIZACIÓN DE MENÚS DESPLEGABLES
    ============================================ */
