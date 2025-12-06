@@ -146,5 +146,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Redirecciones de Login
 LOGIN_URL = 'login' # Nombre de la URL de login
-LOGIN_REDIRECT_URL = 'hostal:habitacion_lista' # A dónde ir después del login
-LOGOUT_REDIRECT_URL = 'login' # A dónde ir después del logout
+LOGIN_REDIRECT_URL = 'hostal:dashboard' # A dónde ir después del login
+LOGOUT_REDIRECT_URL = 'hostal:dashboard' # A dónde ir después del logout
