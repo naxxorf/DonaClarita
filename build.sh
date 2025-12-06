@@ -10,4 +10,4 @@ pip install -r requirements.txt
 cd hostalDonaClarita
 python manage.py collectstatic --noinput
 python manage.py migrate
-python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='hostalDonClarita').exists() or User.objects.create_superuser('hostalDonClarita', 'admin@example.com', 'administracion')"
+python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='hostalDonaClarita').exists() or User.objects.create_superuser('hostalDonaClarita', 'admin@example.com', 'administracion')"
