@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.db import models
-from django.core.validators import RegexValidator, MinValueValidator
+from django.core.validators import MinValueValidator
+from .validators import validar_rut
 
-RUT_VALIDATOR = RegexValidator(r'^\d{7,8}-[0-9kK]$', 'Formato RUT inválido. Ej: 12345678-9')
+RUT_VALIDATOR = validar_rut
 
 # REQUERIMIENTO: REGISTRO DE CLIENTES [cite: 12]
 class Cliente(models.Model):

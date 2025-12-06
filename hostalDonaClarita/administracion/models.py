@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from hostal.validators import validar_rut
 
 User = get_user_model()
 
@@ -9,7 +10,7 @@ User = get_user_model()
 class Proveedor(models.Model):
     id_proveedor = models.CharField(max_length=3, unique=True, help_text="ID de 3 dígitos")
     razon_social = models.CharField(max_length=255, unique=True)
-    rut = models.CharField(max_length=12, unique=True)
+    rut = models.CharField(max_length=12, unique=True, validators=[validar_rut])
     contacto = models.CharField(max_length=255, help_text="Nombre del contacto")
     telefono = models.CharField(max_length=20)
     rubro = models.CharField(max_length=100)
@@ -87,7 +88,7 @@ class Empleado(models.Model):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='empleado_profile')
-    rut = models.CharField(max_length=12, unique=True, help_text="RUT del empleado")
+    rut = models.CharField(max_length=12, unique=True, help_text="RUT del empleado", validators=[validar_rut])
     telefono = models.CharField(max_length=20, blank=True)
     rol = models.CharField(max_length=20, choices=ROLES, default='RECEPCION')
 
